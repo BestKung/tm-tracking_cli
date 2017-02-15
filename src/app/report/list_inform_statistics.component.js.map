@@ -1,0 +1,1 @@
+{"version":3,"file":"list_inform_statistics.component.js","sourceRoot":"","sources":["list_inform_statistics.component.ts"],"names":[],"mappings":";;;;;;;AAAA,sCAAwC;AAMxC,IAAa,oBAAoB;IAAjC;IAAmC,CAAC;IAAD,2BAAC;AAAD,CAAC,AAApC,IAAoC;AAAvB,oBAAoB;IALhC,gBAAS,CAAC;QACP,QAAQ,EAAE,MAAM,CAAC,EAAE;QACnB,QAAQ,EAAE,wBAAwB;QAClC,WAAW,EAAE,+BAA+B;KAC/C,CAAC;GACW,oBAAoB,CAAG;AAAvB,oDAAoB"}

@@ -1,0 +1,64 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าข้อความหนังสือเเจ้ง</div>
+    </div>
+</h2>
+<div class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>ข้อความ</label>
+            <textarea name="text" rows="3" [(ngModel)]="informMessage.message"></textarea>
+            <gt-errors></gt-errors>
+        </div>
+    </div>
+    <div></div>
+    <div class="field">
+        <a class="ui button blue" (click)="save()">บันทึก</a>
+        <a class="ui button" (click)="clear()">เคลียร์</a>
+    </div>
+</div>
+<table class="ui table celled" style="table-layout: fixed">
+    <thead>
+    <tr>
+        <th style="width: 5%;">ลำดับ</th>
+        <th style="width: 70%;">ข้อความ</th>
+        <th style="width: 25%"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let message of pageData.content ; let index = index">
+        <td>{{(currentPage*pageSize)+(index + 1)}}</td>
+        <td style="overflow:hidden;white-space:pre-line;">{{message.message}}</td>
+        <td>
+            <update-button [label]="'เเก้ไข'" [key]="message" (updateEvent)="clickUpdate($event)"></update-button>
+            <delete-button [label]="'ลบ'" [key]="message" (deleteEvent)="clickDelete($event)"></delete-button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="3">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+<div class="ui modal" #confirm_delete>
+    <div class="header">
+        <div class="header">
+            <h4 class="ui center aligned icon header">
+                <i class="Trash Outline icon"></i>
+            </h4>
+        </div>
+    </div>
+    <div class="content">
+        <label>ยืนยันการลบ</label>
+    </div>
+    <div class="actions">
+        <a class="ui button black deny">ยกเลิก</a>
+        <a class="ui button green deny" (click)="delete()">ลบ</a>
+    </div>
+</div>

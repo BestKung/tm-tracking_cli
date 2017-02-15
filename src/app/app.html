@@ -1,0 +1,220 @@
+<sm-menu class="inverted fixed blue">
+    <div class="ui image" style="margin: 10px 15px 9px 15px;">
+        <img src="/assets/images/logo6.png">
+    </div>
+    <a sm-item icon="sidebar big" (click)="menuSidebar.show({transition: 'push'})"></a>
+    <a sm-item icon="home" [routerLink]="['/home']" routerLinkActive="active">Home</a>
+    <sm-menu class="right secondary pointing vertical menu">
+        <a sm-item href="#/elements/menu" icon="user large" *ngIf="user">{{user?.userName}}
+        </a>
+        <a sm-item *isNotAuthen="user" icon="sign in" [routerLink]="['/login']" routerLinkActive="active">Login</a>
+        <a sm-item *hasAnyRole="'*'" icon="sign out" (click)="logout()">Logout</a>
+        <sm-sidebar class="left vertical pointing menu sidebar labeled blue wide inverted" #menuSidebar>
+            <a class="green item" [routerLink]="['/home']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                <i class="large home icon"></i>
+                <label class="header">Home</label>
+            </a>
+            <a class="item header pointing" *hasAnyRole="verifyDocument"
+               [routerLink]="['/verify-evidences/search']"
+               routerLinkActive="active" (click)="menuSidebar.hide()">
+                <i class="large checkmark Box icon"></i>
+                ตรวจสอบเอกสาร
+            </a>
+            <div class="item" *hasAnyRole="followCase">
+                <b>ติดตามงาน</b>
+                <i class="large block bookmark icon"></i>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="followThirdFloor"
+                       [routerLink]="['/follow/floor3']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        กลุ่มบริการและตรวจรับคำขอ
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px " class="item pointing" *hasAnyRole="followTrademark"
+                       [routerLink]="['/follow/trademark']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        คำขอจดทะเบียนเครื่องหมายการค้า
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing" *hasAnyRole="followChange"
+                       [routerLink]="['/follow/change']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        คำขอเเก้ไขเปลี่ยนเเปลงรายการจดทะเบียน
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing" *hasAnyRole="followTranfer"
+                       [routerLink]="['/follow/transfer-legacy']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        คำขอโอนหรือรับมรดกสิทธิ
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing" *hasAnyRole="followApprove"
+                       [routerLink]="['/follow/approve']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        คำขอจดทะเบียนสัญญาอนุญาตให้ใช้
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing" *hasAnyRole="followRenew"
+                       [routerLink]="['/follow/renew']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        คำขอต่ออายุการจดทะเบียน
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="followCancle"
+                       [routerLink]="['/follow/cancel-registration/search']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        คำขอให้เพิกถอนการจดทะเบียน
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="['g_renew','administrator','g_register']">
+                <i class="large announcement icon"></i>
+                <label class="header">ถอยสถานะ</label>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="['g_renew','administrator']"
+                       [routerLink]="['/manage-status/matra56']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        ถอยสถานะมาตรา 56
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="['administrator','g_register']"
+                       [routerLink]="['/manage-status/matra40']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        ถอยสถานะมาตรา 40 วรรค2
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="['g_service', 'administrator']">
+                <b>พิมพ์หนังสือ</b>
+                <i class="large block file icon"></i>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px;" *ngIf="documents"
+                       [routerLink]="['/document/return-request']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        พิมพ์หนังสือคืนคำขอ
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="inform">
+                <i class="large announcement icon"></i>
+                <label class="header">แจ้งเหตุล่าช้า</label>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/print-informs/search']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        บันทึกเเจ้งเหตุล่าช้า
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/print-informs/print']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        พิมพ์หนังสือเเจ้งเหตุล่าช้า
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="letterInform">
+                <i class="large send icon"></i>
+                <label class="header">หนังสือนำส่งไปรษณีย์</label>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/letter-informs/search']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        ใบนำส่งไปรษณีย์
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/letter-acknowledgement/search']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ใบตอบรับไปรษณีย์
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="'*'">
+                <i class="large line chart icon"></i>
+                <label class="header">สถิติและรายงาน</label>
+                <div class="menu">
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/announcement-to-population/search']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        รายงานการแจ้งประชาชน
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/statistics-informing']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        รายงานสถิติของการแจ้งประชาชน
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/services-and-examine/search']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        รายงานสถิติกลุ่มบริการและตรวจรับคำขอ
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/statistics-verify-request']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        สถิติกลุ่มบริการเเละตรวจรับคำขอ
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/operation-duration/search']" routerLinkActivate="active"
+                       (click)="menuSidebar.hide()">
+                        รายงานระยะเวลาดำเนินการแต่ละคำขอ
+                    </a>
+                    <a style="margin-left: 10px; font-size: 14px" class="item pointing"
+                       [routerLink]="['/reports/discard']" routerLinkActivate="active"
+                       (click)="menuSidebar.hide()">
+                        รายงานละทิ้งคำขอมาตรา 40, 56
+                    </a>
+                </div>
+            </div>
+
+            <div class="item" *hasAnyRole="['g_file','g_public','g_change']">
+                <i class="large line chart icon"></i>
+                <label class="header">หยุดเวลา</label>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="['g_file','g_change']"
+                       [routerLink]="['/timer/koh14/search']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        ก.14
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px" *hasAnyRole="['g_file','g_public']"
+                       [routerLink]="['/timer/kohs/search']" routerLinkActive="active" (click)="menuSidebar.hide()">
+                        ก.02, ก.03
+                    </a>
+                </div>
+            </div>
+            <div class="item" *hasAnyRole="['administrator']">
+                <b>ผู้ดูเเลระบบ</b>
+                <i class="large Settings Box icon"></i>
+                <div class="menu">
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/evidence']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        จัดการเอกสาร Checklist
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/deadlines-send-evidence']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าวันครบกำหนดยื่นเอกสารประกอบคำขอ
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/nontification-population-duedate']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าวันครบกำหนดแจ้งประชาชน
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/email-message']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าข้อความเเจ้งเตือน(อีเมล์)
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/manage-act']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าระบุวันที่มีผลตาม พรบ
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/effectivedate-act-facilitate']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าระบุวันที่มีผลตาม พรบ อำนวยความสะดวก
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/inform_message']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ตั้งค่าข้อความหนังสือเเจ้งประชาชน
+                    </a>
+                    <a class="item pointing" style="margin-left: 10px; font-size: 14px"
+                       [routerLink]="['/administrator/manage-stop-duration']" routerLinkActive="active"
+                       (click)="menuSidebar.hide()">
+                        ระยะเวลาการปลดล็อคเวลา
+                    </a>
+                </div>
+            </div>
+        </sm-sidebar>
+    </sm-menu>
+</sm-menu>
+<div class="ui main container">
+    <sm-loader [complete]="httpRequestCompleted" class="inverted" id="load" text="โปรดรอ..."></sm-loader>
+    <router-outlet></router-outlet>
+</div>
+<router-outlet name="dialog"></router-outlet>
+
+

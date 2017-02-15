@@ -1,0 +1,74 @@
+<h4 class="ui header dividing">
+    <!--<i class="info icon"></i>-->
+    <div class="content">รายละเอียดการดำเนินการ</div>
+</h4>
+<div class="ui grid">
+    <div class="two wide column">
+        <label> คำขอเลขที่ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{trNo}}
+    </div>
+    <div class="two wide column">
+        <label> ชื่อ - สกุลผู้ขอ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{conName}}
+    </div>
+    <div class="two wide column">
+        <label> วันที่ยื่นคำขอ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{requestDate | datethai}}
+    </div>
+</div>
+<div class="ui clearing segment">
+    <button class="ui floated right animated vertical teal button" tabindex="0" (click)="excelDownload()">
+        <div class="visible content">
+            <i class="large file excel outline icon"></i>
+        </div>
+        <div class="hidden content">
+            Excel
+        </div>
+    </button>
+    <button class="ui floated right animated vertical teal button" tabindex="0" (click)="pdfDownload()">
+        <div class="visible content">
+            <i class="large file pdf outline icon"></i>
+        </div>
+        <div class="hidden content">
+            PDF
+        </div>
+    </button>
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลา</th>
+            <th class="center aligned">ระยะเวลาที่ใช้</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">วันที่ดำเนินการเสร็จสิ้น</th>
+            <th class="center aligned">สถานะ</th>
+                    </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of reportFollowDetail.content">
+            <td>{{stepDesc[formType][report.stepCode]}}</td>
+            <td class="center aligned">{{report.totalDuration +' '+report.stepDurationType}}</td>
+            <td class="center aligned">{{report.useDuration}}</td>
+            <td>{{report.personName}}</td>
+            <td class="center aligned">{{report.receiptDate | datethai}}</td>
+            <td class="center aligned">{{report.successDate | datethai}}</td>
+            <td class="center aligned">{{report.processStatus}}</td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+<a class="ui right floated animated button" [routerLink]="['/reports/operation-duration/search']"
+   routerLinkActive="active">
+    <div class="visible content">กลับ</div>
+    <div class="hidden content">
+        <i class="left arrow icon"></i>
+    </div>
+</a>

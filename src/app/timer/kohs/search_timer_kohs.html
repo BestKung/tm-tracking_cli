@@ -1,0 +1,86 @@
+<style>
+    div.ui.form.segment {
+        padding-top: 30px;
+    }
+</style>
+<div class="ui form">
+    <div class="fields">
+        <div class="five wide field">
+            <label>คำขอเลขที่</label>
+            <input type="text" [(ngModel)]="search.trNo"/>
+        </div>
+        <!--<div class="six wide field">-->
+            <!--<label>นายทะเบียน</label>-->
+            <!--<p-autoComplete [(ngModel)]="selectedOfficer"-->
+                            <!--[suggestions]="filteredOfficers"-->
+                            <!--(completeMethod)="filterOfficers($event)" [size]="30"-->
+                            <!--[minLength]="1" placeholder="นายทะเบียนผู้ออกคำสั่ง" [dropdown]="true" (onDropdownClick)="handleDropdownClick($event)">-->
+                <!--<template let-officer pTemplate="item">-->
+                    <!--<div class="ui-helper-clearfix">-->
+                        <!--<div>{{officer}}</div>-->
+                    <!--</div>-->
+                <!--</template>-->
+            <!--</p-autoComplete>-->
+        <!--</div>-->
+    </div>
+    <div class="fields">
+        <!--<div class="five wide field">-->
+            <!--<label>สถานะ</label>-->
+            <!--<select class="ui search dropdown">-->
+                <!--<option value="STATUS_ALL">ทั้งหมด</option>-->
+                <!--<option value="STATUS_STOPED">หยุด</option>-->
+                <!--<option value="STATUS_CONTINUOUS">ยังไม่หยุด</option>-->
+            <!--</select>-->
+        <!--</div>-->
+        <div class="four wide field">
+            <label>วันที่เริ่มหยุดเวลาตั้งแต่</label>
+            <p-calendar-gt [(ngModel)]="search.start"></p-calendar-gt>
+        </div>
+        <div class="four wide field">
+            <label>ถึง</label>
+            <p-calendar-gt [(ngModel)]="search.end"></p-calendar-gt>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="five wide field">
+            <button class="ui green button" (click)="searchAction()">
+                <i class="search icon"></i>
+                ค้นหา
+            </button>
+            <button class="ui default button" (click)="clear()">
+                เคลียร์
+            </button>
+        </div>
+    </div>
+</div>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">เเบบฟอร์ม</th>
+        <th class="center aligned">วันที่เริ่มหยุดเวลา</th>
+        <th class="center aligned">จำนวนวันที่หยุด-ปัจจุบัน</th>
+        <th class="center aligned">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content ; let i = index">
+        <td class="center aligned">{{((currentPage*pageSize)<0?0:currentPage*pageSize)+i+1}}</td>
+        <td class="center aligned">{{data.trNo}}</td>
+        <td class="center aligned">{{'ก'+data.formTypeStop}}</td>
+        <td class="center aligned">{{data.stopDate | datethai}}</td>
+        <td class="center aligned">{{data.countDay}}</td>
+        <td class="center aligned">
+            <button class="green tiny ui button" (click)="clickStart(data)"><i class="icon play"></i>เริ่มนับ</button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="6">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

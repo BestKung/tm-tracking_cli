@@ -1,0 +1,1 @@
+{"version":3,"file":"list_letter_inform.component.js","sourceRoot":"","sources":["list_letter_inform.component.ts"],"names":[],"mappings":";;;;;;;AAAA,sCAAwC;AAOxC,IAAa,yBAAyB;IAAtC;IAAwC,CAAC;IAAD,gCAAC;AAAD,CAAC,AAAzC,IAAyC;AAA5B,yBAAyB;IALrC,gBAAS,CAAC;QACP,QAAQ,EAAE,MAAM,CAAC,EAAE;QACnB,QAAQ,EAAE,oBAAoB;QAC9B,WAAW,EAAE,2BAA2B;KAC3C,CAAC;GACW,yBAAyB,CAAG;AAA5B,8DAAyB"}

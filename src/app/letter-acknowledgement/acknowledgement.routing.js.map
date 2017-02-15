@@ -1,0 +1,1 @@
+{"version":3,"file":"acknowledgement.routing.js","sourceRoot":"","sources":["acknowledgement.routing.ts"],"names":[],"mappings":";AACA,uBAA2B,iBAAiB,CAAC,CAAA;AAC7C,0CAAuC,6BAA6B,CAAC,CAAA;AACrE,+CAA0C,gEAAgE,CAAC,CAAA;AAC9F,eAAO,GAAwB,qBAAY,CAAC,QAAQ,CAAC;IAC9D,EAAC,IAAI,EAAE,QAAQ,EAAE,SAAS,EAAE,oDAAwB,EAAC;IACrD,EAAC,IAAI,EAAE,iCAAiC,EAAC,SAAS,EAAE,4DAA2B,EAAC;CACnF,CAAC,CAAC"}

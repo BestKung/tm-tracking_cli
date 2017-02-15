@@ -1,0 +1,1 @@
+{"version":3,"file":"list_service.component.js","sourceRoot":"","sources":["list_service.component.ts"],"names":[],"mappings":";;;;;;;;;;AAAA;;GAEG;AACH,qBAAwB,eAAe,CAAC,CAAA;AAQxC;IAAA;IAA6C,CAAC;IAN9C;QAAC,gBAAS,CAAC;YACP,QAAQ,EAAE,MAAM,CAAC,EAAE;YACnB,QAAQ,EAAE,2BAA2B;YACrC,WAAW,EAAE,mBAAmB;SACnC,CAAC;;sCAAA;IAE2C,qCAAC;AAAD,CAAC,AAA9C,IAA8C;AAAjC,sCAA8B,iCAAG,CAAA"}

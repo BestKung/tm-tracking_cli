@@ -1,0 +1,40 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">Checklist</div>
+    </div>
+</h2>
+<sm-tabs>
+    <sm-tab title="จัดการเอกสาร Checklist">
+        <div class="ui form">
+            <div class="fields">
+                <div class="three wide field">
+                    <label>คู่มือ</label>
+                    <select class="ui dropdown"  (change)="onChangeFormType($event.target.value)">
+                        <option value="">เลือกเอกสาร</option>
+                        <template ngFor let-formType [ngForOf]="formTypes">
+                            <option value="{{formType.id}}">{{formType.formDesc}}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+            <div class="fields">
+                <evidence-tree [evidences]="evidence?.child" (completed)="onChangeFormType($event)"></evidence-tree>
+            </div>
+            <div class="fields">
+                <div class="six wide field">
+                    <div class="actions">
+                        <button class="ui primary right icon button" (click)="saveEvidences()">
+                            <i class="icon save"></i>
+                            บันทึก
+                        </button>
+                        <div class="ui basic deny button " (click)="back()">
+                            กลับ
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </sm-tab>
+</sm-tabs>

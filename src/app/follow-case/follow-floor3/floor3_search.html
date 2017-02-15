@@ -1,0 +1,135 @@
+<form class="ui form">
+    <div class="field">
+        <label>คำขอเลขที่</label>
+        <div class="two fields">
+            <div class="field">
+                <input type="text" [(ngModel)]="_restObjService.trNo" [ngModelOptions]="{standalone: true}"
+                       placeholder="เลขที่คำขอ">
+            </div>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt #start_date placeholder="วันที่ยื่นคำขอ" [(ngModel)]="_restObjService.reqDateFrom"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt #end_date placeholder="ถึง" [(ngModel)]="_restObjService.reqDateTo"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clearSearchFields()">เคลียร์</a>
+    <div class="field"></div>
+    <div>
+        <table class="ui celled blue striped table">
+            <thead>
+            <tr>
+                <th>ระยะเวลาดำเนินการ</th>
+                <th width="10%">ระยะเวลาที่เหลือ</th>
+                <th>ลำดับ</th>
+                <th>คำขอเลขที่</th>
+                <th>วันที่ยื่นคำขอ</th>
+                <th>เจ้าหน้าที่รับคำขอ</th>
+                <th width="5%">รายการเอกสารที่ยังไม่ครบ</th>
+                <th>ยื่นเอกสารเพิ่มเติมภายในวันที่</th>
+                <th class="center aligned" width="7%">คืนคำขอ</th>
+                <th>วันที่ได้รับเอกสารคืนคำขอ</th>
+                <th>วันที่ใช้สิทธิอุธรณ์</th>
+                <th>วันครบกำหนด</th>
+                <th>ละทิ้งคำขอตาม พรบ อำนวยความสะดวก</th>
+                <th>วันที่ใช่สิทธิ์อุทรณ์</th>
+                <!--<th>บันทึกคืนคำขอ</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let absenceAgreement of pageData.content; let rowNum = index;">
+                <td class="center aligned">
+                    {{ absenceAgreement.fullDuration }} วัน
+                </td>
+                <td class="center aligned">
+                    <a *ngIf="absenceAgreement.remainingDays > 0" class="ui tag label"
+                       [ngClass]="applyLabelColor(absenceAgreement.labelColor)">
+                        {{ absenceAgreement.remainingDays + ' วัน'}}
+                    </a>
+                    <a *ngIf="absenceAgreement.remainingDays < 1" class="ui tag tiny label"
+                       [ngClass]="applyLabelColor(absenceAgreement.labelColor)">
+                        {{ "เกินกำหนดระยะเวลา" }}
+                    </a>
+                </td>
+                <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(rowNum+1)}}</td>
+                <td class="center aligned">
+                    <kor20 [requestNo]="absenceAgreement.requestNumber" [ageementId]="absenceAgreement.id"
+                           (completed)="searchAction()"></kor20>
+                </td>
+                <td>{{ absenceAgreement.requestDate | datethai }}</td>
+                <td>{{ absenceAgreement.officerName }}</td>
+                <td class="center aligned">
+                    <absence-evidence-detail [trNo]="absenceAgreement.requestNumber"
+                                             [agreementId]="absenceAgreement.id"
+                                             [reqDate]="absenceAgreement.requestDate"></absence-evidence-detail>
+                </td>
+                <td>{{ absenceAgreement.agreementDueDate | datethai }}</td>
+                <td class="center aligned">
+                    <a *ngIf="absenceAgreement.labelColor == 'red'" class="ui tiny blue"
+                       [routerLink]="['/follow/floor3/return-request', absenceAgreement.id]"
+                       routerLinkActive="active">คืนคำขอ <span *ngIf="(absenceAgreement.returnRequest? true: false)">(บันทึกแล้ว)</span>
+                    </a>
+                </td>
+                <td>{{absenceAgreement?.returnRequest?.returnedDate | datethai}}</td>
+                <td>{{absenceAgreement?.returnRequest?.invokedDate | datethai}}</td>
+                <td>{{absenceAgreement?.returnRequest?.returnedDueDate | datethai}}</td>
+                <td class="center aligned">
+                    <discard-request [agreementId]="absenceAgreement.id"
+                                     [labelColor]="absenceAgreement.labelColor"
+                                     (completed)="searchAction()"></discard-request>
+                </td>
+                <td class="center aligned">
+                    <save-return-detail *ngIf="absenceAgreement.labelColor == 'red'"
+                                        [visible]="((absenceAgreement.returnRequest? true: false) && (absenceAgreement.returnRequest.returnedDate) && (absenceAgreement.informDate))"
+                                        [agreementId]="absenceAgreement.id"
+                                        [invokedDate]="absenceAgreement.invokedDate"
+                                        [returnedDate]="absenceAgreement.returnedDate"
+                                        (completed)="searchAction()"></save-return-detail>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="14">
+                    <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</form>
+
+<div class="ui modal small" #save_document_modal>
+    <i class="close inverted icon"></i>
+    <div class="header">บันทึกเอกสาร ก.20</div>
+    <div class="content">
+        <form class="ui form">
+            <div class="inline fields">
+                <label>ลงวันที่</label>
+                <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="currentKor20Date"
+                               [ngModelOptions]="{standalone: true}" dateFormat="yy-mm-dd"
+                               [disabled]="currentKor20Date"></p-calendar-gt>
+            </div>
+            <br/>
+            <div class="ui center aligned grid">
+                <button class="ui button green" (click)="hideSaveDocModal()">บันทึก</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="ui modal small" #list_doc_incomplete>
+    <i class="close inverted icon"></i>
+    <div class="header">รายการเอกสารที่ยังไม่ครบ</div>
+    <div class="ui bulleted list" *ngFor="let doc of currentMissingDocs">
+        <div class="item">{{ doc }}</div>
+    </div>
+</div>

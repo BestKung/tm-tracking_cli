@@ -1,0 +1,19 @@
+<style>
+    .ui.search > .results {
+        width: 100%;
+    }
+</style>
+
+<div class="ui search" #contract_search [class.visible]="contractResult">
+    <div class="ui icon input">
+        <input #contract_text class="prompt" type="text" [value]="dataInputContract || ''" >
+        <i class="search icon"></i>
+    </div>
+    <div class="results transition" [class.visible]="contractResult"  style="popupStyle">
+        <a class="result" *ngFor="let contract of contractResult">
+            <div class="content" (click)="select(contract)">
+                <div class="title">{{contract?.contractViewPk?.contractName + " ( " + contract?.contractViewPk?.address + " )"}}</div>
+            </div>
+        </a>
+    </div>
+</div>

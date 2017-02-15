@@ -1,0 +1,97 @@
+<div class="ui header dividing">
+    <h3>ทดสอบ การหยุดเวลาติดตามงานการจดทะเบียน</h3>
+</div>
+<div class="form ui">
+    <div class="two fields">
+        <div class="field">
+            <label>เลขที่คำขอ</label>
+            <input [(ngModel)]="trNo">
+        </div>
+        <div class="field">
+            <label style="color: #ffffff;">เลขที่คำขอ</label>
+            <button class="ui button" (click)="searchAction()">ค้นหา</button>
+        </div>
+    </div>
+</div>
+<div>
+    กำหนดวันปัจจุบัน
+    <p-calendar-gt [(ngModel)]="today"></p-calendar-gt>
+</div>
+<table class="ui celled table blue">
+    <thead>
+    <tr>
+        <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+        <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+        <th class="center aligned">วันที่ยื่นคำขอ</th>
+        <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+        <th class="center aligned">วันที่รับงาน</th>
+        <th class="center aligned">สถานะ</th>
+        <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+        <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let stopDuration of stopDuration.content">
+        <td class="center aligned">
+            <div class="fw-progress">
+                <span>{{stopDuration.followTrademark.totalDuration +' '+stopDuration.followTrademark.stepDurationType}}</span>
+            </div>
+        </td>
+        <td>
+            <tag-color-follow-trademanrk [label]="stopDuration.restDurationForStep"
+                                         [restPercenDuration]="stopDuration.restDurationPercenForStep"
+                                         [percenGreen]="stopDuration.followTrademark.stepPercenDurationGreen"
+                                         [percenYellow]="stopDuration.followTrademark.stepPercenDurationYellow"
+                                         [percentOrange]="stopDuration.followTrademark.stepPercenDurationOrange"
+                                         [durationGreen]="stopDuration.followTrademark.stepDurationGreen"
+                                         [durationYellow]="stopDuration.followTrademark.stepDurationYellow"
+                                         [durationOrange]="stopDuration.followTrademark.stepDurationOrange"
+                                         [durationType]="stopDuration.followTrademark.stepDurationType"
+            ></tag-color-follow-trademanrk>
+        </td>
+        <td class="center aligned">{{stopDuration.followTrademark.trNo}}</td>
+        <td class="center aligned">{{stepDesc[stopDuration.followTrademark.stepCode]}}</td>
+        <td class="center aligned">{{stopDuration.followTrademark.requestDate | datethai}}</td>
+        <td class="center aligned">{{stopDuration.followTrademark.personName}}</td>
+        <td class="center aligned">{{stopDuration.followTrademark.receiptDate | datethai}}</td>
+        <td class="center aligned">{{stopDuration.followTrademark.processStatus}}
+            <div style="color: darkblue;">{{(stopDuration.stopDuration)?'('+stopDuration.stopDuration+')' : ''}}</div></td>
+        <td>
+            <tag-color-follow-trademanrk [label]="stopDuration.restDurationForAct"
+                                         [restPercenDuration]="stopDuration.restDorationPercenForAct"
+                                         [percenGreen]="stopDuration.followTrademark.catPercenDurationGreen"
+                                         [percenYellow]="stopDuration.followTrademark.catPercenDurationYellow"
+                                         [percentOrange]="stopDuration.followTrademark.catPercenDurationOrange"
+                                         [durationGreen]="stopDuration.followTrademark.catDurationGreen"
+                                         [durationYellow]="stopDuration.followTrademark.catDurationYellow"
+                                         [durationOrange]="stopDuration.followTrademark.catDurationOrange"
+                                         [durationType]="stopDuration.followTrademark.catDurationType"
+                                         [position]="'left'"
+            ></tag-color-follow-trademanrk>
+        </td>
+        <td class="center aligned">{{stopDuration.overDuration}}</td>
+    </tr>
+    </tbody>
+</table>
+
+<h4 style="margin-top: 100px">ควบคุมการเริ่มนับเวลา(ก02 , ก03 , ก14)</h4>
+<table class="ui celled table blue">
+    <thead>
+    <tr>
+        <th>เลขคำขอ</th>
+        <th>วันที่เริ่มหยุด</th>
+        <th>วันที่เริ่มนับ</th>
+        <th>เริ่มนับ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of stopDurationK.content">
+        <td>{{data.trNo}}</td>
+        <td>{{data.stopDate}}</td>
+        <td> <p-calendar-gt [(ngModel)]="data.startDate"></p-calendar-gt></td>
+        <td><button (click)="clickStartDuration(data)">Start</button></td>
+    </tr>
+    </tbody>
+</table>

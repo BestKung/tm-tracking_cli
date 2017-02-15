@@ -1,0 +1,46 @@
+<style>
+    #discard-date {
+        line-height: 22px;
+        z-index: 9000 !important;
+    }
+    .modal {
+        z-index: 2000;
+    }
+</style>
+
+<a *ngIf="labelColor == 'red'" style="cursor: pointer;" (click)="showDiscardModal()">ละทิ้ง</a>
+
+<div class="ui small modal discard-modal" #discard_modal>
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="circular trash icon"></i>
+            ละทิ้งคำขอตาม พรบ. อำนวยความสะดวก
+        </h4>
+        <form class="ui form">
+            <div class="field">
+                <label>หมายเหตุ</label>
+                <textarea rows="2" [(ngModel)]="discard.reason" [ngModelOptions]="{standalone: true}">
+
+                </textarea>
+            </div>
+            <div class="fields">
+                <div class="six wide field">
+                    <label>วันที่ละทิ้ง</label>
+                    <p-calendar-gt id="discard-date" placeholder="วันที่ละทิ้ง" [(ngModel)]="discard.discardDate" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui buttons tiny">
+            <button type="button" class="ui tiny button primary" (click)="discardRequest()">
+                <i class="save icon"></i>
+                บันทึก
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+

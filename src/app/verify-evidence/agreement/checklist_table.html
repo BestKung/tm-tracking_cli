@@ -1,0 +1,43 @@
+<div class="sixteen wide grid">
+    <div class="ui hidden divider"></div>
+    <table class="ui celled teal striped table">
+        <thead>
+        <tr>
+            <th class="center aligned" width="5%">ลำดับ</th>
+            <th class="center aligned" width="60%">รายการเอกสาร</th>
+            <th class="center aligned" width="5%">ต้นฉบับ</th>
+            <th class="center aligned" width="5%">สำเนา</th>
+            <th class="center aligned" width="5%">ไม่มี</th>
+            <th class="center aligned" width="20%">หมายเหตุ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <template ngFor let-evidence [ngForOf]="evidences">
+            <tr>
+                <td class="center aligned" [attr.rowspan]="evidence.child.length + 1">{{evidence.seqNo}}</td>
+                <td>{{evidence.description}}</td>
+                <td class="center aligned"><i class="centered check icon" [style.display]="(('ALL' == evidence.evidenceType) || ('ORIGINAL' == evidence.evidenceType))? '': 'none'"></i></td>
+                <td class="center aligned"><i class="centered check icon" [style.display]="(('ALL' == evidence.evidenceType) || ('COPY' == evidence.evidenceType))? '': 'none'"></i></td>
+                <td class="center aligned"><input class="ui checkbox" type="checkbox" [(ngModel)]="evidence.hasNo"/></td>
+                <td>
+                    <div class="ui form">
+                        <textarea rows="1" [(ngModel)]="evidence.note"></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngFor="let child of evidence.child">
+                <td>{{child.description}}</td>
+                <td class="center aligned"><i class="centered check icon" [style.display]="(('ALL' == child.evidenceType) || ('ORIGINAL' == child.evidenceType))? '': 'none'"></i></td>
+                <td class="center aligned"><i class="centered check icon" [style.display]="(('ALL' == child.evidenceType) || ('COPY' == child.evidenceType))? '': 'none'"></i></td>
+                <td class="center aligned"><input class="ui checkbox" type="checkbox" [(ngModel)]="child.hasNo"/></td>
+                <td>
+                    <div class="ui form">
+                        <textarea rows="1" [(ngModel)]="child.note"></textarea>
+                    </div>
+                </td>
+            </tr>
+        </template>
+        </tbody>
+    </table>
+    <div class="ui hidden divider"></div>
+</div>

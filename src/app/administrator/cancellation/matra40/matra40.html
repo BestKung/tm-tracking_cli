@@ -1,0 +1,37 @@
+<div class="ui header dividing">
+    <h3>ทดสอบการจำหน่าย ตามมาตรา 40 วรรค2</h3>
+</div>
+<div>
+    วันที่สิ้นสุดการชำระค่ารับจดทะเบียน
+    <p-calendar-gt [(ngModel)]="expireDate"></p-calendar-gt>
+</div>
+<div class="ui form" style="margin-top: 10px">
+    <a class="ui button" (click)="searchAction()">Gen Cancellation</a>
+</div>
+<table class="ui table celled">
+    <thead>
+    <tr>
+        <th>เลขที่คำขอ</th>
+        <th>ตค</th>
+        <th>วันที่ออกเลข พณ</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content">
+        <td>{{data.trNo}}</td>
+        <td>5(3)</td>
+        <td>{{data.bookDate}}</td>
+        <td>
+            <button (click)="cancellation(data.trNo)">จำหน่ายตามมาตรา 40 วรรค2</button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="4">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,12 @@
+<div>
+    <div style="margin-left: 15px" *ngFor="let evidence of evidences">
+        <div *ngIf="evidence.isCategory">
+            <label style="font-weight: bold" *ngIf="evidence.seqNo">{{evidence.seqNo}} . </label><label
+                style="font-weight: bold">{{ evidence.description }}</label>
+            <evidence-tree [evidences]="evidence.child"></evidence-tree>
+        </div>
+        <div *ngIf="!evidence.isCategory">
+            <evidence-table [evidences]="evidence.child" [formType]="evidence.formType" (deleteCompleted)="setDeleteStatus($event)"></evidence-table>
+        </div>
+    </div>
+</div>

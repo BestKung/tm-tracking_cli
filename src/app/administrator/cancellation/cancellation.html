@@ -1,0 +1,37 @@
+<div class="ui header dividing">
+    <h3>ทดสอบเพิกถอน ตามมาตรา 56</h3>
+</div>
+<div>
+    วันที่สิ้นสุดการต่ออายุ
+    <p-calendar-gt [(ngModel)]="expireDate"></p-calendar-gt>
+</div>
+<div class="ui form" style="margin-top: 10px">
+    <a class="ui button" (click)="searchAction()">Gen Cancellation</a>
+</div>
+<table class="ui table celled">
+    <thead>
+    <tr>
+        <th>เลขที่คำขอ</th>
+        <th>เลขทะเบียน</th>
+        <th>วันหมดอายุ</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content">
+        <td>{{data.trNo}}</td>
+        <td>{{data.regNo}}</td>
+        <td>{{data.expireDate}}</td>
+        <td>
+            <button (click)="cancellation(data.trNo)">เพิกถอนตามมาตรา 56</button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="4">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

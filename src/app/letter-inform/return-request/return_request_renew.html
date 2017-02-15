@@ -1,0 +1,68 @@
+<h3 class="ui horizontal divider header">
+    <i class="tag icon"></i>
+    บันทึกคืนคำขอ ครั้งที่ {{returnRequestRenew.bookNo}}
+</h3>
+<div class="ui piled segment ">
+    <form class="ui form">
+        <div class="two fields">
+            <div class="field">
+                <label>เรื่อง</label>
+                <input type="text" placeholder="เรื่อง" [(ngModel)]="returnRequestRenew.title" [ngModelOptions]="{standalone: true}" value="คืนคำขอพร้อมส่งเอกสารคืน">
+                <gt-errors [violation]="'title'"></gt-errors>
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>เรียน</label>
+                <input type="text" [(ngModel)]="returnRequestRenew.receiver" [ngModelOptions]="{standalone: true}" placeholder="เรียน">
+                <gt-errors [violation]="'receiver'"></gt-errors>
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>อ้างถึง</label>
+                <input type="text" [(ngModel)]="returnRequestRenew.referenceTo" [ngModelOptions]="{standalone: true}" placeholder="อ้างถึง">
+                <gt-errors [violation]="'referenceTo'"></gt-errors>
+            </div>
+        </div>
+        <div class="two fields">
+            <div class="field">
+                <label>สิ่งที่ส่งมาด้วย</label>
+                <textarea rows="2" [(ngModel)]="returnRequestRenew.attachedItem" [ngModelOptions]="{standalone: true}" placeholder="สิ่งที่ส่งมาด้วย"></textarea>
+            </div>
+        </div>
+        <p style="line-height: 22px"><dd>ตามที่ ท่านได้ยื่นคำขอจดทะเบียนเครื่องหมายการค้า เลขที่คำขอ <b>{{ returnRequestRenew.trNo }}</b> และพนักงานเจ้าหน้าที่ ได้แจ้งให้ท่านดำเนินการ แก้ไขหรือยื่นเอกสารเพิ่ม เติมภายในวันที่
+            <br/><label style="color: red;"><u>{{returnRequestRenew.agreementDueDate | datethai}}</u></label> นั้น</p>
+        <div class="field">
+            <textarea [(ngModel)]="returnRequestRenew.detail" [ngModelOptions]="{standalone: true}" style="line-height: 22px" ></textarea>
+            <gt-errors [violation]="'detail'"></gt-errors>
+        </div>
+        <p><dd>ทั้้งนี้ ท่านมีสิทธิอุธรณ์การคืนคำขอ โดยยื่นต่อพนักงานเจ้าหน้าที่ภายใน 15 วัน นับแต่วันที่ได้รับแจ้งคำสั่งฉบับนี้ จึงเรียนมาเพื่อทราบ</p>
+    </form>
+
+    <div>
+        <button *ngIf="!showPrintBtn" class="ui tiny icon button basic right floated" (click)="clearReturnRequestFields()">เคลียร์</button>
+        <button *ngIf="showPrintBtn" class="ui tiny icon button primary right floated" (click)="printReturnRequestReport()"><i class="icon print"></i>พิมพ์บันทึกคืนคำขอ</button>
+        <button class="ui icon tiny button primary right floated" (click)="save()"><i class="icon save"></i>บันทึก</button>
+        <button class="ui tiny button basic floated" [routerLink]="['/letter-acknowledgement/search']" routerLinkActive="active">กลับ</button>
+    </div>
+</div>
+
+<div #confirm_modal class="ui small modal confirm-modal" style="text-align: center;">
+    <i class="close icon"></i>
+    <div class="content" style="overflow: auto;">
+        <div class="description">
+            <p><i class="icon info circle blue"></i>ยืนยันการบันทึกคืนคำขอ ใช่หรือไม่?</p>
+        </div>
+    </div>
+    <div class="actions" style="text-align: center;">
+        <div class="ui green icon button" (click)="onSave()">
+            <i class="icon checkmark"></i>
+            ใช่
+        </div>
+        <div class="ui basic button" (click)="closeConfirmDialog()">
+            <i class="icon remove"></i>
+            ยกเลิก
+        </div>
+    </div>
+</div>

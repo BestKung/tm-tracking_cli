@@ -1,0 +1,104 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="trademark-no" placeholder="คำขอเลขที่" [(ngModel)]="followChangeRestObj.searchRequest.trNo"/>
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" name="step-working" [(ngModel)]="followChangeRestObj.searchRequest.stepCode">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">บริการและตรวจรับคำขอ</option>
+                <option value="202">นายทะเบียนพิจารณา</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="followChangeRestObj.searchRequest.startDateStr"
+                           name="searchRequest.startDate"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="followChangeRestObj.searchRequest.endDateStr" name="searchRequest.endDate"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+    </form>
+<div class="field">
+    <label>รวมระยะเวลาทั้งหมดของคำขอแก้ไขเปลี่ยนแปลงรายการจดทะเบียน : 61 วัน</label>
+</div>
+<div class="one fields">
+    <table class="ui celled table blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width: 10%;">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let change of pageData.content; let index = index">
+            <td class="center aligned">
+                <div class="fw-progress">
+                    <span>{{change.totalDuration +' '+change.stepDurationType}}</span>
+                </div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="change.restDurationForStep"
+                                             [restPercenDuration]="change.restDorationPercenForStep"
+                                             [percenGreen]="change.stepPercenDurationGreen"
+                                             [percenYellow]="change.stepPercenDurationYellow"
+                                             [percentOrange]="change.stepPercenDurationOrange"
+                                             [durationGreen]="change.stepDurationGreen"
+                                             [durationYellow]="change.stepDurationYellow"
+                                             [durationOrange]="change.stepDurationOrange"
+                                             [durationType]="change.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{change.trNo}}</td>
+            <td class="center aligned">{{followChangeRestObj.stepDesc[change.stepCode]}}</td>
+            <td class="center aligned">{{change.requestDate | datethai}}</td>
+            <td class="center aligned">{{change.personName}}</td>
+            <td class="center aligned">{{change.receiptDate | datethai}}</td>
+            <td class="center aligned">{{change.processStatus}}</td>
+            <td class="center aligned">
+                <detail-change-button [trNo]="change.trNo"></detail-change-button>
+            <td>
+                <tag-color-follow-trademanrk [label]="change.restDurationForAct"
+                                             [restPercenDuration]="change.restDorationPercenForAct"
+                                             [percenGreen]="change.catPercenDurationGreen"
+                                             [percenYellow]="change.catPercenDurationYellow"
+                                             [percentOrange]="change.catPercenDurationOrange"
+                                             [durationGreen]="change.catDurationGreen"
+                                             [durationYellow]="change.catDurationYellow"
+                                             [durationOrange]="change.catDurationOrange"
+                                             [durationType]="change.catDurationType"
+                                             [position]="'left'"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{change.overDuration}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,37 @@
+/**
+ * Created by best on 5/10/2559.
+ */
+export class FollowChange {
+    trNo:number;
+    requestDate:Date;
+    receiptDate:Date;
+    personName:string;
+    successDate:Date;
+    processStatus:string;
+    userId:string;
+    startCountDuration:Date;
+    conName:string;
+    actId:string;
+    totalDuration:number;
+    stepPercenDurationGreen:number;
+    stepPercenDurationYellow:number;
+    stepPercenDurationOrange:number;
+    catPercenDurationGreen:number;
+    catPercenDurationYellow:number;
+    catPercenDurationOrange:number;
+    stepDurationGreen:number;
+    stepDurationYellow:number;
+    stepDurationOrange:number;
+    stepDurationType:number;
+    catDurationGreen:number;
+    catDurationYellow:number;
+    catDurationOrange:number;
+    catDurationType:number;
+    overDuration:number;
+    restDorationPercenForAct:number;
+    restDorationPercenForStep:number;
+    restDurationForAct:string;
+    restDurationForStep:string;
+    stepCode:string;
+    useDuration:string;
+}

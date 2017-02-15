@@ -1,0 +1,103 @@
+<style>
+    div.ui.form.segment {
+        padding-top: 30px;
+    }
+</style>
+<div class="ui form">
+    <div class="fields">
+        <div class="four wide field">
+            <label>คำขอเลขที่</label>
+            <input type="text" [(ngModel)]="searchVK14.trNo"/>
+        </div>
+        <div class="four wide field">
+            <label>สถานะ</label>
+            <select class="ui search dropdown" [(ngModel)]="searchVK14.status">
+                <option value="">ทั้งหมด</option>
+                <option value="stop">หยุด</option>
+                <option value="no_action">ยังไม่หยุด</option>
+            </select>
+        </div>
+    </div>
+       <!-- <div class="six wide field">
+            <label>นายทะเบียน</label>
+            <p-autoComplete [(ngModel)]="selectedOfficer"
+                            [suggestions]="filteredOfficers"
+                            (completeMethod)="filterOfficers($event)" [size]="30"
+                            [minLength]="1" placeholder="นายทะเบียนผู้ออกคำสั่ง" [dropdown]="true"
+                            (onDropdownClick)="handleDropdownClick($event)">
+                <template let-officer pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                        <div>{{officer}}</div>
+                    </div>
+                </template>
+            </p-autoComplete>
+        </div>
+    </div>-->
+   <!-- <div class="fields">
+        <div class="five wide field">
+            <label>สถานะ</label>
+            <select class="ui search dropdown" [(ngModel)]="searchVK14.status">
+                <option value="">ทั้งหมด</option>
+                <option value="stop">หยุด</option>
+                <option value="">ยังไม่หยุด</option>
+            </select>
+        </div>-->
+        <div class="fields">
+        <div class="four wide field">
+            <label>วันที่เริ่มหยุดเวลาตั้งแต่</label>
+            <p-calendar-gt [(ngModel)]="searchVK14.start"></p-calendar-gt>
+        </div>
+        <div class="four wide field">
+            <label>ถึง</label>
+            <p-calendar-gt [(ngModel)]="searchVK14.end"></p-calendar-gt>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="five wide field">
+            <button class="ui green button" (click)="searchAction()">
+                <i class="search icon"></i>
+                ค้นหา
+            </button>
+            <button class="ui default button" (click)="clear()">
+                เคลียร์
+            </button>
+        </div>
+    </div>
+</div>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">วันที่เริ่มหยุดเวลา</th>
+        <th class="center aligned">จำนวนวันที่หยุด-ปัจจุบัน</th>
+        <th class="center aligned">สถานะ</th>
+        <th class="center aligned">การดำเนินการ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content ; let i = index">
+        <td class="center aligned">{{(((currentPage)*pageSize)<0?0:((currentPage)*pageSize))+(i+1)}}</td>
+        <td class="center aligned">{{data.trNo}}</td>
+        <td class="center aligned">{{data?.stopDate | datethai}}</td>
+        <td class="center aligned">{{data.countDay}}</td>
+        <td class="center aligned">{{isStopDuration(data)?'หยุด':''}}</td>
+        <td class="center aligned">
+            <button class="ui left attached tiny red button" (click)="clickStopDuration(data.trNo,data.id)"
+                    [disabled]="isStopDuration(data)"><i class="icon pause"></i>หยุดเวลา
+            </button>
+            <button class="right attached green tiny ui button" (click)="clickStartDuration(data)" [disabled]="!isStopDuration(data)"><i
+                    class="icon play"></i>เริ่มนับ
+            </button>
+            <button  style="margin-left: 5px" class="tiny ui button blue" (click)="clickSuccess(data)" [disabled]="isStopDuration(data)">เสร็จสิ้น</button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="6">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

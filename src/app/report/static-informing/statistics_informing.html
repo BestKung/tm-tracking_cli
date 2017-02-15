@@ -1,0 +1,35 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>ระบุช่วงวันที่<label style="color: red;"> *</label></label>
+            <p-calendar-gt placeholder="ระบุช่วงวันที่" [(ngModel)]="searchRequest.startDate" [ngModelOptions]="{standalone: true}"
+            ></p-calendar-gt>
+            <label *ngIf="isErrorStartDate" style="color: red;font-weight: 200">กรุณาระบุวันที่เริ่ม</label>
+        </div>
+        <div class="field">
+            <label>ถึง<label style="color: red;"> *</label></label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="searchRequest.endDate" [ngModelOptions]="{standalone: true}"
+            ></p-calendar-gt>
+            <label *ngIf="isErrorEndDate" style="color: red;font-weight: 200">กรุณาระบุวันที่สิ้นสุด</label>
+        </div>
+    </div>
+    <a class="ui button green" (click)="search()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+
+<sm-tabs *ngIf="showGraph">
+    <sm-tab title="Bar Chart" class="active">
+        <a onclick="this.href=document.getElementById('bar-chart').getElementsByTagName('canvas')[0].toDataURL('image/png')"
+           download="bar-chart.png" style="cursor: pointer">Download</a>
+        <gt-chart type="bar" id="bar-chart" [data]="dataBarChart" [options]="options"></gt-chart>
+    </sm-tab>
+    <sm-tab title="Line Chart">
+        <a onclick="this.href=document.getElementById('line-chart').getElementsByTagName('canvas')[0].toDataURL('image/png')"
+           download="bar-chart.png" style="cursor: pointer">Download</a>
+        <gt-chart type="line" id="line-chart" [data]="dataLineChart" [options]="options" ></gt-chart>
+    </sm-tab>
+</sm-tabs>
+
+
+
+

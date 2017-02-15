@@ -1,0 +1,265 @@
+<style>
+    tumbon {
+        width: 100%;
+    }
+</style>
+
+<table class="ui celled teal striped table">
+    <thead>
+    <tr>
+        <th class="center aligned" width="10%">ลำดับ</th>
+        <th class="center aligned">เอกสาร</th>
+        <th class="center aligned" width="20%">รายละเอียดตรวจสอบเอกสาร</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let formType of formTypes; let rownum = index">
+        <td class="center aligned">{{rownum + 1}}</td>
+        <td>{{formType.formDesc}}</td>
+        <td class="center aligned">
+            <checklist-component [formId]="formType.id"></checklist-component>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h4 class="ui horizontal divider header">
+    <i class="book icon"></i>
+    บันทึกข้อตกลงการรับคำขอ
+</h4>
+<div class="ui raised segment">
+    <form class="ui form">
+        <div class="ui teal ribbon label"><h4>ส่วนที่ ๑: สำหรับผู้ยื่นคำขอ</h4></div>
+        <div class="ui divider hidden"></div>
+        <div class="field">
+            <div class="fields">
+                <div class="nine wide field">
+                    <label>ชื่อ-สกุล <label style="color: red;">*</label></label>
+                    <contract-search (selected)="selectedContract($event)" [dataInputContract]="restObjectService.contract.contractName ||''"></contract-search>
+                    <gt-errors [violation]="'agreementContract.contractName'"></gt-errors>
+                </div>
+                <div class="one wide field">
+                    <label>เพิ่ม</label>
+                    <div class="ui input">
+                        <i id="add-agent" class="inverted circular plus link green icon" (click)="showAddContractModal()"></i>
+                    </div>
+                </div>
+                <div class="six wide field">
+                    <label>เลขประจำตัวประชาชน/เลขทะเบียนนิติบุคคล/Passport <label style="color: red;">*</label></label>
+                    <input type="text" maxlength="13" name="card-no" [(ngModel)]="restObjectService.contract.cardNo">
+                    <gt-errors [violation]="'agreementContract.cardNo'"></gt-errors>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="fields">
+                <div class="ten wide field">
+                    <label>ที่อยู่ <label style="color: red;">*</label></label>
+                    <input type="text" name="address" [(ngModel)]="restObjectService.contract.address"/>
+                    <gt-errors [violation]="'agreementContract.address'"></gt-errors>
+                </div>
+                <div class="three wide field">
+                    <label>ตำบล/แขวง</label>
+                    <tumbon (selected)="selectedTumbon($event)" [dataInputTumbon]="restObjectService?.contract?.tumbon || ''"></tumbon>
+                </div>
+                <div class="three wide field">
+                    <label>อำเภอ/เขต <label style="color: red;">*</label></label>
+                    <input type="text" name="aumbhur-name" [value]="selectedLocation?.locAbbrName" [(ngModel)]="restObjectService.contract.aumbhur"/>
+                    <gt-errors [violation]="'agreementContract.aumbhur'"></gt-errors>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="fields">
+                <div class="six wide field">
+                    <label>จังหวัด <label style="color: red;">*</label></label>
+                    <input type="text" name="province-name" [value]="selectedLocation?.provName" [(ngModel)]="restObjectService.contract.province"/>
+                    <gt-errors [violation]="'agreementContract.province'"></gt-errors>
+                </div>
+                <div class="two wide field">
+                    <label>รหัสไปรษณีย์ <label style="color: red;">*</label></label>
+                    <input type="text" name="postcode"  maxlength="5" [(ngModel)]="restObjectService.contract.postCode "/>
+                    <gt-errors [violation]="'agreementContract.postCode'"></gt-errors>
+                </div>
+                <div class="eight wide field">
+                    <label>อีเมล์</label>
+                    <input type="text" name="email" [(ngModel)]="restObjectService.contract.email">
+                    <gt-errors [violation]="'agreementContract.email'"></gt-errors>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="fields">
+                <div class="sixteen wide field">
+                    <label>คำขอเลขที่</label>
+                    <input type="text" value="{{restObjectService?.pk[0]?.trNo}}">
+                </div>
+            </div>
+        </div>
+        <div class="ui teal ribbon label"><h4>ส่วนที่ ๒: สำหรับพนักงานเจ้าหน้าที่</h4></div>
+        <div class="ui divider hidden"></div>
+        <div class="field">
+            <label>ชื่อ-สกุล <label style="color: red;">*</label></label><gt-errors [violation]="'officerName'"></gt-errors>
+            <input type="text" name="officer-name" [(ngModel)]="restObjectService.officerName" [value]="restObjectService?.officerName">
+        </div>
+        <div class="field">
+            <label>ตำแหน่ง <label style="color: red;">*</label> </label><gt-errors [violation]="'officerPosition'"></gt-errors>
+            <div class="fields">
+                <div class="five wide field">
+                    <select class="ui dropdown" (change)="officerPositionChange($event.target.value)" [value]="restObjectService.officerPosition">
+                        <option value="">เลือกตำแหน่ง</option>
+                        <option value="TRADE_OFFICER">นักวิชาการพาณิชย์ชำนาญการ</option>
+                        <option value="TRADE_PERSONNEL">เจ้าพนักงานการพาณิชย์</option>
+                        <option value="OFFICER">เจ้าหน้าที่</option>
+                        <option value="SPECIALISTS_TRADE_OFFICER">นักวิชาการพาณิชย์</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>ได้ตรวจสอบเอกสารประกอบการยื่นคำขอ</label>
+            <input type="text" [value]="formSeq">
+        </div>
+        <div *ngIf="agreement.agreementDueDate" class="field">
+            <div class="fields">
+                <div class="three wide field">
+                    <label>ยื่นเอกสารเพิ่มเติมภายในวันที่</label>
+                    <p-calendar-gt #agmtDueDate (onSelect)="getDateThaiFromServer(agmtDueDate.value)"
+                                   [(ngModel)]="agreement.agreementDueDate" [ngModelOptions]="{standalone: true}">
+                    </p-calendar-gt>
+                </div>
+                <div *ngIf="dateThai" class="six wide field">
+                    <br/>
+                    <div class="ui left pointing blue label">
+                        {{dateThai}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment">
+            <p>แล้วเห็นว่าผู้ยื่นคำขอได้ยื่นเอกสารตามแบบรายการเอกสาร (Checklist) ตามแนบแล้วปรากฏว่า
+                เอกสารไม่ครบถ้วน โดยมีรายละเอียดตามแบบรายการเอกสาร (Checklist) ตามแนบ
+                จึงได้แจ้งให้ผู้ยื่นคำขอดำเนินการแก้ไขให้ถูกต้องครบถ้วนแล้ว และผู้ยื่นคำขอตกลงว่าจะดำเนินการแก้ไข
+                หรือยื่นเอกสารเพิ่มเติมภายใน {{agreement?.agreementDueDate | datethai}}
+            </p>
+        </div>
+        <div>
+            <button class="ui positive button" (click)="showConfirmDialog()">
+                <i class="save icon"></i>
+                บันทึก
+            </button>
+            <button *ngIf="showPrintBtn" class="ui primary button" (click)="printAgreementReport()">
+                <i class="print icon"></i>
+                พิมพ์บันทึกข้อตกลง
+            </button>
+            <button class="ui basic button" (click)="back()">
+                กลับ
+            </button>
+        </div>
+    </form>
+</div>
+
+<div #add_contract_modal class="ui long modal add-agent-modal1">
+    <i class="close icon"></i>
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="circular add user icon"></i>
+            เพิ่มรายชื่อผู้ติดต่อ
+        </h4>
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="fields">
+                <div class="eight wide field">
+                    <label>ชื่อ-นามสกุล <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="ชื่อ-นามสกุล" [(ngModel)]="contract.contractName">
+                    </div>
+                    <gt-errors [violation]="'contractName'"></gt-errors>
+                </div>
+                <div class="eight wide field">
+                    <label>เลขประจำตัวประชาชน/เลขทะเบียนนิติบุคคล/Passport <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" size="13" placeholder="เลขประจำตัวประชาชน/เลขทะเบียนนิติบุคคล/Passport" [(ngModel)]="contract.cardNo" required="true" maxlength="13">
+                    </div>
+                    <gt-errors [violation]="'cardNo'"></gt-errors>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="eight wide field">
+                    <label>ที่อยู่ <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="ที่อยู่" [(ngModel)]="contract.address">
+                    </div>
+                    <gt-errors [violation]="'address'"></gt-errors>
+                </div>
+                <div class="four wide field">
+                    <label>ตำบล/แขวง </label>
+                    <div class="ui small input">
+                        <tumbon (selected)="selectNewTumbon($event)" [dataInputTumbon]="contract.tumbon || ''"></tumbon>
+                    </div>
+                </div>
+                <div class="four wide field">
+                    <label>อำเภอ/เขต <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="อำเภอ/เขต" [(ngModel)]="contract.aumbhur">
+                    </div>
+                    <gt-errors [violation]="'aumbhur'"></gt-errors>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="eight wide field">
+                    <label>จังหวัด <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="จังหวัด" [(ngModel)]="contract.province">
+                    </div>
+                    <gt-errors [violation]="'province'"></gt-errors>
+                </div>
+                <div class="three wide field">
+                    <label>รหัสไปรษณีย์ <label style="color: red;">*</label></label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="รหัสไปรษณีย์" [(ngModel)]="contract.postCode" maxlength="5">
+                    </div>
+                    <gt-errors [violation]="'postCode'"></gt-errors>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="eight wide field">
+                    <label>อีเมล์</label>
+                    <div class="ui small input">
+                        <input type="text" placeholder="อีเมล์" [(ngModel)]="contract.email">
+                    </div>
+                    <gt-errors [violation]="'contract.email'"></gt-errors>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="ui tiny button primary" (click)="addNewContract()">
+            <i class="save icon"></i>
+            เพิ่ม
+        </button>
+        <button class="ui tiny basic button" (click)="clearNewContractField()">
+            เคลียร์
+        </button>
+    </div>
+</div>
+
+<div #confirm_modal class="ui small modal confirm-modal" style="text-align: center;">
+    <i class="close icon"></i>
+    <div class="content" style="overflow: auto;">
+        <div class="description">
+            <p><i class="icon info circle blue"></i>ยืนยันการบันทึกข้อตกลง ใช่หรือไม่?</p>
+        </div>
+    </div>
+    <div class="actions" style="text-align: center;">
+        <button id="confirmBtn" #confirmBtn type="button" class="ui green icon button" (click)="save()">
+            <i class="icon checkmark"></i>
+            ใช่
+        </button>
+        <div class="ui basic button" (click)="closeModal()">
+            <i class="icon remove"></i>
+            ยกเลิก
+        </div>
+    </div>
+</div>

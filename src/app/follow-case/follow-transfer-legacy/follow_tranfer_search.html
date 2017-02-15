@@ -1,0 +1,106 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="trademark-no" placeholder="คำขอเลขที่" [(ngModel)]="followTransferRestObj.searchRequest.trNo"/>
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" name="step-working" [(ngModel)]="followTransferRestObj.searchRequest.stepCode" [ngModelOptions]="{standalone: true}">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">บริการและตรวจรับคำขอ</option>
+                <option value="202">นายทะเบียนพิจารณา</option>
+                <option value="308">ออกหนังสือแสดงรายการการโอนหรือรับมรดก</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ"
+                           [(ngModel)]="followTransferRestObj.searchRequest.startDateStr" name="searchRequest.startDate"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="followTransferRestObj.searchRequest.endDateStr"
+                           name="searchRequest.endDate"></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+<div class="field">
+    <label>รวมระยะเวลาทั้งหมดของคำขอโอน หรือรับมรดกสิทธิ : 98 วัน</label>
+</div>
+<div class="one fields">
+    <table class="ui celled table blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width: 10%">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let tranfer of pageData.content ;let index = index">
+            <td class="center aligned">
+                <div class="fw-progress">
+                    <span>{{tranfer.totalDuration + ' '+tranfer.catDurationType}}</span>
+                </div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="tranfer.restDurationForStep"
+                                             [restPercenDuration]="tranfer.restDorationPercenForStep"
+                                             [percenGreen]="tranfer.stepPercenDurationGreen"
+                                             [percenYellow]="tranfer.stepPercenDurationYellow"
+                                             [percentOrange]="tranfer.stepPercenDurationOrange"
+                                             [durationGreen]="tranfer.stepDurationGreen"
+                                             [durationYellow]="tranfer.stepDurationYellow"
+                                             [durationOrange]="tranfer.stepDurationOrange"
+                                             [durationType]="tranfer.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{tranfer.trNo}}</td>
+            <td class="center aligned">{{followTransferRestObj.stepDesc[tranfer.stepCode]}}</td>
+            <td class="center aligned">{{tranfer.requestDate | datethai}}</td>
+            <td class="center aligned">{{tranfer.personName}}</td>
+            <td class="center aligned">{{tranfer.receiptDate | datethai}}</td>
+            <td class="center aligned">{{tranfer.processStatus}}</td>
+            <td class="center aligned">
+                <detail-tranfer-button [trNo]="tranfer.trNo"></detail-tranfer-button>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="tranfer.restDurationForAct"
+                                             [restPercenDuration]="tranfer.restDorationPercenForAct"
+                                             [percenGreen]="tranfer.catPercenDurationGreen"
+                                             [percenYellow]="tranfer.catPercenDurationYellow"
+                                             [percentOrange]="tranfer.catPercenDurationOrange"
+                                             [durationGreen]="tranfer.catDurationGreen"
+                                             [durationYellow]="tranfer.catDurationYellow"
+                                             [durationOrange]="tranfer.catDurationOrange"
+                                             [durationType]="tranfer.catDurationType"
+                                             [position]="'left'"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{tranfer.overDuration}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

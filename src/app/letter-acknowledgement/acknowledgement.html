@@ -1,0 +1,136 @@
+<h2 class="ui header">
+    <i class="circular mail blue outline icon"></i>
+    <div class="content">ใบตอบรับทางไปรษณีย์</div>
+</h2>
+<div class="ui form">
+    <div class="fields">
+        <div class="five wide field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="reqNo" placeholder="คำขอเลขที่" [(ngModel)]="search.trNo">
+        </div>
+        <div class="five wide field">
+            <label>เลข พณ.</label>
+            <input type="text" name="bookAdmin" placeholder="เลข พณ." [(ngModel)]="search.bookAdmin">
+        </div>
+        <div class="five wide field">
+            <label>สถานะ</label>
+            <select #status_selection class="ui dropdown" (change)="statusChange($event)">
+                <option value="">ทั้งหมด</option>
+                <option value="1">บันทึกแล้ว</option>
+                <option value="2" selected="selected">ยังไม่บันทึก</option>
+            </select>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="five wide field">
+            <label>วันที่ออกหนังสือตั้งแต่</label>
+            <p-calendar-gt placeholder="วันที่ออกหนังสือตั้งแต่" [(ngModel)]="search.bookDateFrom" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+        <div class="five wide field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="search.bookDateTo" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+
+        </div>
+    </div>
+    <div class="fields">
+        <div class="four wide field">
+            <button class="ui green button" (click)="searchAction()">
+                <i class="icon search"></i>
+                ค้นหา
+            </button>
+            <button class="ui button" (click)="clear()">เคลียร์</button>
+        </div>
+    </div>
+</div>
+
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned"><input #chkAll type="checkbox" (click)="checkAll(chkAll)" [(ngModel)]="cbAll"></th>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">ชื่อผู้รับ</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">เลข พณ.</th>
+        <th class="center aligned">วันที่ออกหนังสือ</th>
+        <th width="20%" class="center aligned">วันที่ตอบรับ</th>
+        <th class="center aligned">วันที่ครบกำหนด</th>
+        <th class="center aligned">การรับหนังสือ</th>
+        <th class="center aligned">บันทึกคืนคำขอใหม่</th>
+        <th class="center aligned">หมายเหตุ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let itm of pageData.content; let rownum = index;">
+        <td>
+            <input #chkbx type="checkbox" (change)="check(itm, chkbx)" [checked]="itm.chk"/>
+        </td>
+        <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(rownum+1)}}</td>
+        <td>{{itm?.agreementContract?.contractName}}</td>
+        <td>{{itm?.trNo}}</td>
+        <td>{{itm?.bookAdmin}}</td>
+        <td>{{itm?.bookDate | datethai}}</td>
+        <td>
+            <p-calendar-gt *ngIf="!itm.flagRecv"
+                           placeholder="วันที่ตอบรับ"
+                           [(ngModel)]="itm.recvDate"
+                           (onSelect)="changeReturnDueDate(itm)"
+                           [ngModelOptions]="{standalone: true}">
+            </p-calendar-gt>
+            <p-calendar-gt *ngIf="itm.flagRecv"
+                           placeholder="วันที่ตอบรับ"
+                           [(ngModel)]="itm.recvDate"
+                           [ngModelOptions]="{standalone: true}"
+                           [disabled]="true">
+            </p-calendar-gt>
+        </td>
+        <td>
+            {{itm.dueDate | datethai}}
+        </td>
+        <td>
+            <select *ngIf="itm.letterStatus == null" class="ui dropdown" name="receive-letter-methods"
+                    (change)="setLetterStatus(itm, $event)">
+                <option value="">สถานะ</option>
+                <option *ngFor="let status of letterStatus" [value]="status">{{status}}</option>
+            </select>
+            <select *ngIf="itm.letterStatus != null" class="ui dropdown" name="receive-letter-methods">
+                <option [value]="itm?.letterStatus">{{itm?.letterStatus}}</option>
+            </select>
+        </td>
+        <td>
+            <a *ngIf="(itm.letterStatus=='จดหมายตีกลับ' && itm.renewState=='WAITING_VERIFY') || (itm.letterStatus=='จดหมายตีกลับ' && !itm.renewState)
+                     ||(itm.letterStatus=='ไม่ได้รับหนังสือ' && itm.renewState=='WAITING_VERIFY') || (itm.letterStatus=='ไม่ได้รับหนังสือ' && !itm.renewState)" class="ui tiny blue"
+               [routerLink]="['/return-request-renew/', itm.id]"
+               routerLinkActive="active">คืนคำขอ
+            </a>
+            <label style="color: red;" *ngIf="(itm.letterStatus=='จดหมายตีกลับ' && itm.renewState=='VERIFIED') || (itm.letterStatus=='ไม่ได้รับหนังสือ' && itm.renewState=='VERIFIED')" >
+                *ครั้งที่ {{itm.bookNo}}
+            </label>
+        </td>
+        <td>
+            <div *ngIf="!itm.flagRecv" style="width: 100px;" class="ui input">
+                <input type="ui text" [(ngModel)]="itm.ackNote"/>
+            </div>
+            <div *ngIf="itm.flagRecv" style="width: 100px;" class="ui input">
+                <input type="ui text" [value]="itm.ackNote" readonly/>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="11">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    <tr *ngIf="pageData.content.length > 0">
+        <th colspan="11" class="center aligned">
+            <button class="ui icon primary button" (click)="saveAction() ">
+                <i class="icon save"></i>
+                บันทึกใบตอบรับ
+            </button>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+

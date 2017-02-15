@@ -1,0 +1,18 @@
+<div class="ui pagination menu">
+    <a class="item" (click)="clickItem(0)" [class.disabled]="currentPage === 1">หน้าแรก</a>
+    <a class="icon item" (click)="back()">
+        <i class="left chevron icon"></i>
+    </a>
+    <a class="item" [class.active]="currentPage === page" (click)="clickItem(page)" *ngFor="let page of pages">
+        {{page}}
+    </a>
+    <a class="icon item" (click)="next()">
+        <i class="right chevron icon"></i>
+    </a>
+    <a class="item" (click)="clickItem(page.totalPages)" [class.disabled]="page.totalPages===currentPage">หน้าสุดท้าย( {{page.totalPages}} )</a>
+</div>
+<div class="ui right floated buttons" *ngIf="canSelectSize">
+    <button class="ui button" (click)="setPageSize(10)" [class.active]="pageSize===10">10</button>
+    <button class="ui button" (click)="setPageSize(20)" [class.active]="pageSize===20">20</button>
+    <button class="ui button" (click)="setPageSize(30)" [class.active]="pageSize===30">30</button>
+</div>

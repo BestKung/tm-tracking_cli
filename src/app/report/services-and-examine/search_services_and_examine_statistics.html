@@ -1,0 +1,105 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>รายงาน</label>
+            <select class="ui dropdown" name="report-type" (change)="reportChange($event)" [(ngModel)]="search.reportType">
+                <option value="">เลือกรายงาน</option>
+                <option value="1">รายงานสถิติการบันทึกข้อตกลง</option>
+                <option value="2">รายงานสถิติการแจ้งคืนคำขอ</option>
+                <option value="3">รายงานสถิติการยื่นอุทธรณ์</option>
+                <option value="4">รายงานสถิติการบันทึก ก.20</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>เอกสาร</label>
+            <select class="ui dropdown" name="form-type" (change)="formTypeChange($event)" [(ngModel)]="search.formType">
+                <option value="">เลือกเอกสาร</option>
+                <option *ngFor="let itm of formTypes" value="{{itm.id}}">{{itm.desc}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="tr-no" placeholder="คำขอเลขที่" [(ngModel)]="search.trNo"/>
+        </div>
+        <div class="field">
+            <label>หน่วยงานที่รับคำขอ</label>
+            <select class="ui dropdown" name="org" (change)="orgChange($event)" [(ngModel)]="search.organize">
+                <option value="1">กรมทรัพย์สินทางปัญญา</option>
+                <option value="2">สำนักงานพาณิชย์จังหวัด</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>ระบุช่วงวันที่บันทึกข้อตกลง</label>
+            <p-calendar-gt name="date-from" placeholder="ระบุช่วงวันที่บันทึกข้อตกลง"
+                           [(ngModel)]="search.createDateFrom"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt name="date-to" placeholder="ถึง" [(ngModel)]="search.createDateTo"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+
+<div class="ui clearing segment">
+    <button class="ui floated right animated vertical teal button" (click)="exportTo('xlsx')">
+        <div class="visible content">
+            <i class="large file excel outline icon"></i>
+        </div>
+        <div class="hidden content">
+            Excel
+        </div>
+    </button>
+    <button class="ui floated right animated vertical teal button" (click)="exportTo('pdf')">
+        <div class="visible content">
+            <i class="large file pdf outline icon"></i>
+        </div>
+        <div class="hidden content">
+            PDF
+        </div>
+    </button>
+
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ชื่อ-สกุล</th>
+            <th class="center aligned">วันที่บันทึกข้อตกลง</th>
+            <th class="center aligned">วันที่ออกหนังสือคืนคำขอ</th>
+            <th class="center aligned">วันที่รับคืนเอกสาร</th>
+            <th class="center aligned">วันที่ใช้สิทธิอุธรณ์</th>
+            <th class="center aligned">หน่วยงานที่รับคำขอ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let itm of pageData.content; let rownum = index">
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(rownum+1)}}</td>
+            <td class="center aligned">{{itm?.trNo}}</td>
+            <td>{{itm?.contractName}}</td>
+            <td class="center aligned">{{itm?.createDate | datethai}}</td>
+            <td class="center aligned">{{itm?.bookDate | datethai}}</td>
+            <td class="center aligned">{{itm?.returnedDate | datethai}}</td>
+            <td class="center aligned">{{itm?.invokedDate | datethai}}</td>
+            <td class="center aligned">{{itm.organize}}</td>
+        </tr>
+        <tr>
+            <td class="right aligned" colspan="7">รวมจำนวน {{reportType}} ทั้งสิ้น</td>
+            <td>{{pageData.totalElements}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="10">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

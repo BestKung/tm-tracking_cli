@@ -1,0 +1,97 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" placeholder="คำขอเลขที่" [(ngModel)]="notifRestService.searchReport.trNo"
+                   [ngModelOptions]="{standalone: true}"/>
+        </div>
+        <div class="field">
+            <label>คู่มือ</label>
+            <select [(ngModel)]="notifRestService.searchReport.formType"
+                    [ngModelOptions]="{standalone: true}">
+                <option value="">เลือกคู่มือ</option>
+                <option value="01">ก.01</option>
+                <option value="04">ก.04</option>
+                <option value="05">ก.05</option>
+                <option value="06">ก.06</option>
+                <option value="07">ก.07</option>
+                <option value="08">ก.08</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>ระบุช่วงวันที่เเล้วเสร็จ</label>
+            <p-calendar-gt placeholder="ระบุช่วงวันที่"
+
+                           [(ngModel)]="notifRestService.searchReport.startDate"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง"
+
+                           [(ngModel)]="notifRestService.searchReport.endDate"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+<div class="ui clearing segment">
+    <button class="ui floated right animated vertical teal button" tabindex="0" (click)="excelDownload()">
+        <div class="visible content">
+            <i class="large file excel outline icon"></i>
+        </div>
+        <div class="hidden content">
+            Excel
+        </div>
+    </button>
+    <button class="ui floated right animated vertical teal button" tabindex="0" (click)="pdfDownload()">
+        <div class="visible content">
+            <i class="large file pdf outline icon"></i>
+        </div>
+        <div class="hidden content">
+            PDF
+        </div>
+    </button>
+
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาในการดำเนินการรวม</th>
+            <th class="center aligned">ระยะเวลาที่ใช้</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">รายการ</th>
+            <th class="center aligned">วันที่แล้วเสร็จ</th>
+            <th class="center aligned">รายละเอียด</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let report of pageData.content ; let index = index">
+            <td class="center aligned">{{report.totalDuration+" "+report.durationType}}</td>
+            <td class="center aligned">{{report.useDuration}}</td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{report.trNo}}</td>
+            <td class="center aligned">{{report.requestDate | datethai}}</td>
+            <td class="center aligned">{{"ก."+report.formType}}</td>
+            <td class="center aligned">{{report.success | datethai}}</td>
+            <td class="center aligned">
+                <detail-report-button [pathUrl]="'reports/operation-duration/detail/'"
+                                      [trNo]="report.trNo"
+                                      [formType]="report.formType"></detail-report-button>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="8">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+

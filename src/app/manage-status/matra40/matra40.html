@@ -1,0 +1,85 @@
+<div class="ui header dividing">
+    <h3>ถอยสถานะ มาตรา 40 วรรค2</h3>
+</div>
+<div class="form ui">
+    <div class="two fields">
+        <div class="field">
+            <label>เลขคำขอ</label>
+            <input placeholder="เลขคำขอ" [(ngModel)]="search.trNo">
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่เปลี่ยนสถานะ</label>
+            <p-calendar-gt placeholder="วันที่เปลี่ยนสถานะ" [(ngModel)]="search.start"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="search.end"></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</div>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">เลขคำขอ</th>
+        <th class="center aligned">วันที่เปลี่ยนสถานะ</th>
+        <th class="center aligned">ถอยสถานะ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content ; let index = index">
+        <td class="center aligned">{{index+1}}</td>
+        <td class="center aligned">{{data.trNo}}</td>
+        <td class="center aligned">{{data.createDate | datethai}}</td>
+        <td class="center aligned">
+            <button class="ui button blue tiny" (click)="openModalConfirm(data)">ถอยสถานะ</button>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr *ngIf="pageData.content.length > 0">
+        <th colspan="6">
+            <button class="ui button blue tiny" (click)="openModalConfirmAll()">ถอยสถานะทั้งหมด</button>
+        </th>
+    </tr>
+    <tr>
+        <th colspan="6">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<div class="ui modal" #confirm>
+    <i class="close icon"></i>
+    <div class="header">
+        ยืนยันการถอยสถานะ
+    </div>
+    <div class="content">
+        ต้องการถอยสถานะคำขอเลขที่ {{backStatus.trNo}}
+    </div>
+    <div class="actions">
+        <div class="ui button deny green" (click)="clickBackStatus()">ตกลง</div>
+        <div class="ui button deny red">ยกเลิก</div>
+    </div>
+</div>
+
+
+<div class="ui modal" #confirm_all>
+    <i class="close icon"></i>
+    <div class="header">
+        ยืนยันการถอยสถานะ
+    </div>
+    <div class="content">
+        ต้องการถอยสถานะทั้งหมด
+    </div>
+    <div class="actions">
+        <div class="ui button deny green" (click)="clickBackStatusAll()">ตกลง</div>
+        <div class="ui button deny red">ยกเลิก</div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<style>
+    p-calendar-gt {
+        line-height: 22px;
+        z-index: 100000 !important;
+    }
+    .kor20_modal > .content {
+        z-index: 2000;
+        height: 200px;
+        overflow: auto;
+    }
+</style>
+
+<a class="ui tiny blue" style="cursor: pointer;" (click)="showKor20Modal()">{{requestNo}}</a>
+
+<div class="ui small kor20_modal modal" #kor20_modal style="observeChanges: true">
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="circular calendar outline icon"></i>
+            บันทึกเอกสาร ก.20
+        </h4>
+        <div class="ui divider" type="hidden"></div>
+        <br><br>
+        <div class="ui sixteen column centered grid">
+            <form class="ui form">
+                <div class="inline fields center align">
+                    <label>วันที่บันทึก ก.20</label>
+                    <p-calendar-gt placeholder="วันที่บันทึก" [(ngModel)]="recvKor20Date" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui buttons tiny">
+            <!--<button class="ui tiny button primary" (click)="saveKor20Date()">-->
+            <button type="button" class="ui tiny button primary" (click)="showConfirmDialog()">
+                <i class="save icon"></i>
+                บันทึก
+            </button>
+        </div>
+    </div>
+</div>
+
+<div #confirm_modal class="ui small modal confirm-modal" style="text-align: center;">
+    <i class="close icon"></i>
+    <div class="content" style="overflow: auto;">
+        <div class="description">
+            <p><i class="icon info circle blue"></i>ยืนยันการบันทึก ก.20 ใช่หรือไม่?</p>
+        </div>
+    </div>
+    <div class="actions" style="text-align: center;">
+        <div class="ui green icon button" (click)="saveKor20Date()">
+            <i class="icon checkmark"></i>
+            ใช่
+        </div>
+        <div class="ui basic button" (click)="cancelSaveKor20Date()">
+            <i class="icon remove"></i>
+            ยกเลิก
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="trademark-no" placeholder="คำขอเลขที่" [(ngModel)]="followRenewRestObjService.search.trNo"/>
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" name="step-working" [(ngModel)]="followRenewRestObjService.search.stepCode">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">บริการและตรวจรับคำขอ</option>
+                <option value="202">นายทะเบียนพิจารณา</option>
+                <option value="308">ออกหนังสือแสดงจดทะเบียน</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="followRenewRestObjService.search.startDateStr"
+                           name="search.startDateStr"
+            ></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="followRenewRestObjService.search.endDateStr"
+                           name="search.endDateStr"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+    </form>
+<div class="field">
+    <label>รวมระยะเวลาทั้งหมดของคำขอต่ออายุการจดทะเบียนเครื่องหมายการค้า : 68 วัน</label>
+</div>
+<div class="one fields">
+    <table class="ui celled table blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width: 10%">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let renew of pageData.content; let index = index">
+            <td class="center aligned">
+                <div class="fw-progress">
+                    <span>{{renew.totalDuration +' '+renew.stepDurationType}}</span>
+                </div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="renew.restDurationForStep"
+                                             [restPercenDuration]="renew.restDorationPercenForStep"
+                                             [percenGreen]="renew.stepPercenDurationGreen"
+                                             [percenYellow]="renew.stepPercenDurationYellow"
+                                             [percentOrange]="renew.stepPercenDurationOrange"
+                                             [durationGreen]="renew.stepDurationGreen"
+                                             [durationYellow]="renew.stepDurationYellow"
+                                             [durationOrange]="renew.stepDurationOrange"
+                                             [durationType]="renew.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{renew.trNo}}</td>
+            <td class="center aligned">{{findStepDescByStepCode(renew.stepCode)}}</td>
+            <td class="center aligned">{{renew.requestDate | datethai}}</td>
+            <td class="center aligned">{{renew.personName}}</td>
+            <td class="center aligned">{{renew.receiptDate | datethai}}</td>
+            <td class="center aligned">{{renew.processStatus}}</td>
+            <td class="center aligned">
+                <detail-renew-button [trNo]="renew.trNo"></detail-renew-button>
+            <td>
+                <tag-color-follow-trademanrk [label]="renew.restDurationForAct"
+                                             [restPercenDuration]="renew.restDorationPercenForAct"
+                                             [percenGreen]="renew.catPercenDurationGreen"
+                                             [percenYellow]="renew.catPercenDurationYellow"
+                                             [percentOrange]="renew.catPercenDurationOrange"
+                                             [durationGreen]="renew.catDurationGreen"
+                                             [durationYellow]="renew.catDurationYellow"
+                                             [durationOrange]="renew.catDurationOrange"
+                                             [durationType]="renew.catDurationType"
+                                             [position]="'left'"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{renew.overDuration}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

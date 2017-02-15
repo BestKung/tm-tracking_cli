@@ -1,0 +1,18 @@
+<div class="ui text container">
+    <div>
+        <img class="ui image centered" src="/assets/images/home.png">
+    </div>
+
+    <form class="ui form" #loginForm="ngForm">
+        <div class="field">
+            <label>Username</label>
+            <input type="text" required [(ngModel)]="username" name="userId" placeholder="Your userId">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="password" required [(ngModel)]="password" name="password" placeholder="Your password">
+        </div>
+        <button [disabled]="!loginForm.form.valid" (click)="doLogin($event)" class="ui primary button">Log in</button>
+    </form>
+    <label style="color: red;">{{failMessage}}</label>
+</div>

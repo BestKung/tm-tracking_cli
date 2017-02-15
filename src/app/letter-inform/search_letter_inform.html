@@ -1,0 +1,127 @@
+<h2 class="ui header">
+    <i class="circular send red icon"></i>
+    <div class="content">ใบนำส่งไปรษณีย์</div>
+</h2>
+<div class="ui form">
+    <div class="fields">
+        <div class="five wide field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="reqNo" placeholder="คำขอเลขที่" [(ngModel)]="search.trNo">
+        </div>
+        <div class="five wide field">
+            <label>สถานะ</label>
+            <select #status_selection class="ui dropdown" (change)="statusChange($event)">
+                <option value="">ทั้งหมด</option>
+                <option value="1">บันทึกแล้ว</option>
+                <option value="2" selected="selected">ยังไม่บันทึก</option>
+            </select>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="five wide field">
+            <label>วันที่ออกหนังสือตั้งแต่</label>
+            <p-calendar-gt placeholder="วันที่ออกหนังสือตั้งแต่" [(ngModel)]="search.bookDateFrom"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+        <div class="five wide field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="search.bookDateTo"
+                           [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="four wide field">
+            <button class="ui green button" (click)="searchAction()">
+                <i class="icon search"></i>
+                ค้นหา
+            </button>
+            <button class="ui button" (click)="clearInputs()">เคลียร์</button>
+        </div>
+    </div>
+</div>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned"><input type="checkbox" (change)="checkAll($event)" [(ngModel)]="chkListAll" [checked]="isCheckboxAll()"></th>
+        <th class="center aligned" width="5%">ลำดับ</th>
+        <th class="center aligned" width="15%">ผู้รับ</th>
+        <th class="center aligned" width="15%">ที่อยู่</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">เลข พณ.</th>
+        <th class="center aligned" width="10%">วันที่ออกหนังสือ</th>
+        <th class="center aligned">รับเอกสารด้วยตนเอง</th>
+        <th class="center aligned">หมายเลข 13 หลัก (โปรดเรียงลำดับตามหมายเลขด้วย)</th>
+        <th class="center aligned">หมายเหตุ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let itm of pageData.content; let rownum = index;">
+        <td>
+            <input type="checkbox" (change)="check($event)" [(ngModel)]="itm.chk">
+        </td>
+        <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(rownum+1)}}</td>
+        <td>{{itm?.agreementContract?.contractName}}</td>
+        <td>{{itm?.agreementContract?.fullAddr}}</td>
+        <td>{{itm?.trNo}}</td>
+        <td>{{itm?.bookAdmin}}</td>
+        <td class="center aligned">{{itm?.bookDate | datethai}}</td>
+        <td class="center aligned">
+            <input type="checkbox" [(ngModel)]="itm.receivedMethod">
+        </td>
+        <td class="center aligned">
+            <div class="ui input small">
+                <input type="text" class="tracking-no" style="width: 140px;" maxlength="13" [(ngModel)]="itm.trackingNo" [disabled]="itm.receivedMethod">
+            </div>
+        </td>
+        <td class="center aligned">
+            <div class="ui input">
+                <input type="text" class="inform-note" style="width: 100px;" [(ngModel)]="itm.informNote" [disabled]="itm.receivedMethod">
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="10">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    <tr *ngIf="pageData.content.length > 0">
+        <th colspan="10" class="center aligned">
+            <button *ngIf="status_selection.value != 1" class="ui icon blue button" (click)="showConfirmDialog()">
+                <i class="icon save"></i>
+                บันทึก
+            </button>
+            <button class="ui icon blue button" (click)="printLetterInformCard()">
+                <i class="icon print"></i>
+                พิมพ์บัตรเหลือง
+            </button>
+            <button class="ui icon blue button" (click)="printWaybill()">
+                <i class="icon print"></i>
+                พิมพ์ใบนำส่ง
+            </button>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+
+<div #confirm_modal class="ui small modal confirm-modal" style="text-align: center;">
+    <i class="close icon"></i>
+    <div class="content" style="overflow: auto;">
+        <div class="description">
+            <p><i class="icon info circle blue"></i>ยืนยันการบันทึกใบนำส่งไปรษณีย์ ใช่หรือไม่?</p>
+        </div>
+    </div>
+    <div class="actions" style="text-align: center;">
+        <div class="ui green icon button" (click)="saveAction()">
+            <i class="icon checkmark"></i>
+            ใช่
+        </div>
+        <div class="ui basic button" (click)="closeConfirmDialog()">
+            <i class="icon remove"></i>
+            ยกเลิก
+        </div>
+    </div>
+</div>
+

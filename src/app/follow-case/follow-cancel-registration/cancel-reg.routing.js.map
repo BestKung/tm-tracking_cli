@@ -1,0 +1,1 @@
+{"version":3,"file":"cancel-reg.routing.js","sourceRoot":"","sources":["cancel-reg.routing.ts"],"names":[],"mappings":";AACA,uBAA2B,iBAAiB,CAAC,CAAA;AAC7C,mDAA8C,sCAAsC,CAAC,CAAA;AACrF,mDAA8C,+DAA+D,CAAC,CAAA;AAC9G;;GAEG;AACU,eAAO,GAAyB,qBAAY,CAAC,QAAQ,CAC9D;IACI,EAAC,IAAI,EAAE,EAAE,EAAC,SAAS,EAAE,oEAA+B,EAAC;IACrD,EAAC,IAAI,EAAE,cAAc,EAAC,SAAS,EAAE,oEAA+B,EAAC;CACpE,CACJ,CAAC"}

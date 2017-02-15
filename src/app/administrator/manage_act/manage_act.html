@@ -1,0 +1,36 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าระบุวันที่มีผลตาม พรบ</div>
+    </div>
+</h2>
+<form class="ui form">
+    <table class="ui table celled blue">
+        <thead>
+        <tr>
+            <th>ลำดับ</th>
+            <th>วันที่มีผล<label style="color: red">*</label></th>
+            <th>รายละเอียด</th>
+            <th>บันทึก</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let act of acts.content;let index = index">
+            <td>{{index+1}}</td>
+            <td>
+                <p-calendar-gt
+                        [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="act.actDate">
+                </p-calendar-gt>
+                <gt-errors *ngIf="act.actId == actId" [violation]="'actDate'"></gt-errors>
+            </td>
+            <td><input type="text" placeholder="รายบะเอียด" [(ngModel)]="act.actDetail"
+                       [ngModelOptions]="{standalone: true}"></td>
+            <td>
+                <button class="ui button blue" (click)="saveAct(act)">บันทึก</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>

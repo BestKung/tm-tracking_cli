@@ -1,0 +1,46 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าวันครบกำหนดแจ้งประชาชน</div>
+    </div>
+</h2>
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>จำนวนวันเเจ้งประชาชน<label style="color: red;">*</label></label>
+            <input type="text" [(ngModel)]="nontificationPopulationDuedate.dueDate" name="dueDate">
+            <gt-errors [violation]="'dueDate'"></gt-errors>
+        </div>
+        <div class="field">
+            <label style="color: white">.</label>
+            <button class="ui button blue" (click)="save()">บันทึก</button>
+        </div>
+    </div>
+</form>
+<label>ประวัติการตั้งค่าวันครบกำหนดแจ้งประชาชน</label>
+<table class="table ui celled">
+    <thead>
+    <tr>
+        <th>ลำดับ</th>
+        <th>วันที่สร้าง</th>
+        <th>จำนวนวันเเจ้งประชาชน</th>
+        <th>สถานะ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let duedate of pageData.content;let index = index">
+        <td>{{(currentPage*pageSize)+(index+1)}}</td>
+        <td>{{duedate.createDate | datethai}}</td>
+        <td>{{duedate.dueDate}}</td>
+        <td>{{((currentPage*pageSize)+(index+1) == 1)?'ใช้งาน':''}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="4">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

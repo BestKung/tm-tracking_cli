@@ -1,0 +1,54 @@
+<style>
+    p-calendar-gt {
+        line-height: 22px;
+        z-index: 9000 !important;
+    }
+    .modal {
+        z-index: 2000;
+    }
+</style>
+
+<a *ngIf="visible" class="circular ui icon" style="cursor: pointer; " (click)="showSaveReturnDetailModal()">
+    <i class="icon save"></i>
+</a>
+
+<div class="ui small modal" #save_return_detail_modal style="observeChanges: true">
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="circular alarm outline icon"></i>
+            บันทึกคืนคำขอ
+        </h4>
+    </div>
+    <br><br><br>
+    <div class="row">
+        <form class="ui form">
+            <div class="ui sixteen column grid">
+                <div class="three wide column hidden"></div>
+                <div class="ten wide column">
+                    <label>วันที่ได้รับเอกสารคืนคำขอ</label>
+                    <p-calendar-gt placeholder="วันที่ได้รับเอกสารคืนคำขอ" [disabled]="true" [(ngModel)]="returnedDate" (onSelect)="changeReturnDueDate()" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+                </div>
+                <div class="three wide column hidden"></div>
+                <div class="three wide column hidden"></div>
+                <div class="ten wide column">
+                    <label>วันที่ใช้สิทธิอุธรณ์</label>
+                    <p-calendar-gt placeholder="วันที่ใช้สิทธิอุธรณ์" [(ngModel)]="invokedDate" [ngModelOptions]="{standalone: true}"></p-calendar-gt>
+                </div>
+                <div class="three wide column hidden"></div>
+                <div class="three wide column hidden"></div>
+                <div class="ten wide column">
+                    <label>วันครบกำหนด (15 วัน หลังจากวันที่ได้รับเอกสารคืนคำขอ)</label>
+                    <input #returnedDueDate_value type="text" readonly value="{{returnedDueDate | datethai}}" [disabled]="true" >
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui buttons tiny">
+            <button type="button" class="ui tiny button primary" (click)="saveAction()">
+                <i class="save icon"></i>
+                บันทึก
+            </button>
+        </div>
+    </div>
+</div>

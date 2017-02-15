@@ -1,0 +1,130 @@
+<h2 class="ui header">
+    <i class="circular red write square icon"></i>
+    <div class="content">
+        แจ้งเหตุล่าช้า
+        <div class="ui sub header "><h4>บันทึกเเจ้งเหตุล่าช้า</h4></div>
+    </div>
+</h2>
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="reqNo" placeholder="คำขอเลขที่" [(ngModel)]="trNo">
+        </div>
+        <div class="field">
+            <label>คู่มือ</label>
+            <select name="formType" [(ngModel)]="formType">
+                <option value="">เลือกคู่มือ</option>
+                <option value="01">ก.01</option>
+                <option value="04">ก.04</option>
+                <option value="05">ก.05</option>
+                <option value="06">ก.06</option>
+                <option value="07">ก.07</option>
+                <option value="08">ก.08</option>
+            </select>
+        </div>
+    </div>
+    <a class="ui button green" (click)="search()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned" style="width: 5%"><input type="checkbox" (change)="checkAll($event)"
+                                                            [(ngModel)]="chkAll"></th>
+        <th class="center aligned" style="width: 10%">ลำดับ</th>
+        <th class="center aligned" style="width: 10%">คำขอเลขที่</th>
+        <th class="center aligned" style="width: 45%">ชื่อ-สกุล (เจ้าของ)</th>
+        <th class="center aligned" style="width: 10%">คู่มือ</th>
+        <th class="center aligned" style="width: 10%">ข้อความ</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let inform of pageData.content ; let index = index">
+        <td class="center aligned"><input type="checkbox" [(ngModel)]="inform.chk" (change)="cancelCheckAll($event)">
+        </td>
+        <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+        <!--TODO change the ip to map with ip server.-->
+        <td class="center aligned"><a [href]="'http://192.168.1.127:7001/DipIntranetWeb/sis/01/sis01q020/index.jsf?trNoParam=' + inform.trNo">{{inform.trNo}}</a></td>
+        <td>{{inform.conName}}</td>
+        <td class="center aligned">{{inform.formType}}</td>
+        <td class="center aligned"><a class="ui button teal mini" (click)="clickMessage(inform)">ข้อความ</a></td>
+    </tr>
+    </tbody>
+    <tfoot>
+
+    </tfoot>
+    <tfoot>
+    <tr>
+        <th colspan="6">
+            <a class="ui button teal mini" (click)="clickMessageAll(inform)">ข้อความ</a>
+            <label style="color:red;" *ngIf="isNotChackMessageBook">กรุณาเลือกเลขที่คำขอที่ต้องการบันทึกข้อความ</label>
+        </th>
+    </tr>
+    <tr>
+        <th colspan="6">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+<div class="ui modal large" #add_message>
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="Book icon"></i>
+            ข้อความ สำหรับพิมพ์หนังสือเเจ้ง
+        </h4>
+    </div>
+    <div class="content">
+        <div class="ui grid">
+            <div class="eight wide column" style="">
+                <div class="ui form">
+                    <div class="field" *ngIf="!isClickMessageAll">
+                        <label>หมายเหตุ</label>
+                        <textarea rows="3" [(ngModel)]="informTemplatePrint.textRemark"></textarea>
+                    </div>
+                    <div class="field">
+                        <label>เนื่องจาก</label>
+                        <textarea rows="5" [(ngModel)]="informTemplatePrint.text"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <label>เลือกข้อความ (จำนวนข้อความ {{informMessages.totalElements}} จำนวนหน้า
+                    {{informMessages.totalPages}})</label>
+                <table class="ui table celled selectable"
+                       style="table-layout: fixed;max-height:100px;overflow-y: scroll">
+                    <tbody>
+                    <tr *ngFor="let informmessage of informMessages.content">
+                        <td style="overflow: hidden;white-space: pre-line"
+                            (click)="selectMessage(informmessage.message)">
+                            {{informmessage.message}}
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="1">
+                            <button class="ui button icon" (click)="prePageModal()" [disabled]="informMessages.first">
+                                <i class="left chevron icon"></i>
+                            </button>
+                            <button class="ui button icon">
+                                <i class="icon">{{pageModal+1}}</i>
+                            </button>
+                            <button class="ui button icon" (click)="nextPageModal()" [disabled]="informMessages.last">
+                                <i class="right chevron icon"></i>
+                            </button>
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <a class="ui button" (click)="clearMessage()">เคลียร์</a>
+        <a class="ui button black deny">ยกเลิก</a>
+        <a class="ui button blue deny" (click)="saveMessage()" *ngIf="!isClickMessageAll">บันทึก</a>
+        <a class="ui button blue deny" (click)="saveAll()" *ngIf="isClickMessageAll">บันทึก</a>
+    </div>
+</div>

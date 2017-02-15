@@ -1,0 +1,89 @@
+
+<div class="sixteen wide grid">
+    <div class="ui hidden divider"></div>
+    <table class="ui celled table">
+        <thead>
+        <tr>
+            <th width="17%">
+                <button class="ui mini blue button" (click)="addMainEvidence(evidences)">
+                    <i class="icon plus"></i>
+                    <label>เพิ่มเอกสารหลัก</label>
+                </button>
+            </th>
+            <th class="center aligned" width="8%">ลำดับ</th>
+            <th class="center aligned" width="60%">รายการเอกสาร</th>
+            <th class="center aligned" width="15%">ชนิดเอกสาร</th>
+        </tr>
+        </thead>
+        <tbody class="ui compact celled definition table">
+        <template ngFor let-evidence [ngForOf]="evidences">
+            <tr>
+                <td>
+                    <a class="ui blue ribbon label" >
+                        เอกสารหลัก
+                    </a>
+                    <button class="circular ui green icon mini button" (click)="addSubEvidence(evidence)">
+                        <i class="icon add"></i>
+                    </button>
+                    <button *ngIf="evidence.delPermit && !evidence.delState" class="circular ui default icon mini button" (click)="removeEvidence(evidences, evidence)">
+                        <i class="icon minus"></i>
+                    </button>
+                </td>
+                <td>
+                    <div class="ui small input">
+                        <input type="number" minlength="0" [(ngModel)]="evidence.seqNo" style="width: 100%;"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui form">
+                        <textarea [(ngModel)]="evidence.description"
+                                  placeholder="รายการเอกสารหลัก"
+                                  rows="4"></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui form">
+                        <select [(ngModel)]="evidence.evidenceType">
+                            <option value="ALL">ทั้งหมด</option>
+                            <option value="ORIGINAL">ต้นฉบับ</option>
+                            <option value="COPY">สำเนา</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngFor="let child of evidence.child">
+                <td>
+                    <a class="ui default ribbon label">เอกสารย่อย</a>
+                    <button *ngIf="child.delPermit" class="circular ui default icon mini button" (click)="removeEvidence(evidence.child, child)">
+                        <i class="icon minus"></i>
+                    </button>
+                </td>
+                <td></td>
+                <td>
+                    <div class="ui form">
+                        <textarea [(ngModel)]="child.description"
+                                  placeholder="รายการเอกสารย่อย"
+                                  rows="4"></textarea>
+                    </div>
+                </td>
+                <td>
+                    <div class="ui form">
+                        <select [(ngModel)]="child.evidenceType">
+                            <option value="ALL">ทั้งหมด</option>
+                            <option value="ORIGINAL">ต้นฉบับ</option>
+                            <option value="COPY">สำเนา</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </template>
+        </tbody>
+        <tfoot class="full-width">
+        <tr>
+            <th colspan="4">
+
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

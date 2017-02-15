@@ -1,0 +1,127 @@
+<div class="ui form">
+    <div class="fields">
+        <div class="five wide field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="reqNo" placeholder="คำขอเลขที่" [(ngModel)]="search.trNo">
+        </div>
+        <div class="five wide field">
+            <label>สถานะออกเลข พณ. </label>
+            <select #book_admin_status_selection class="ui dropdown" [(ngModel)]="search.status" (change)="bookAdminStatusChange($event)">
+                <!--<option value="">ทั้งหมด</option>-->
+                <option value="1" selected="selected">ยังไม่ออกเลข พณ.</option>
+                <option value="2">ออกเลข พณ. แล้ว</option>
+            </select>
+        </div>
+        <div class="five wide field">
+            <label>สถานะออกหนังสือ </label>
+            <select #book_status_selection class="ui dropdown" [(ngModel)]="search.bookStatus" (change)="bookStatusChange($event)">
+                <option value="1" selected="selected">ปกติ</option>
+                <option value="2">ยกเลิก</option>
+            </select>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="five wide field">
+            <label>วันที่บันทึกคืนคำขอ</label>
+            <p-calendar-gt placeholder="วันที่บันทึกคืนคำขอ"
+                           [(ngModel)]="search.returnDateFrom"></p-calendar-gt>
+        </div>
+        <div class="five wide field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง"
+                           [(ngModel)]="search.returnDateTo"></p-calendar-gt>
+
+        </div>
+    </div>
+    <div class="fields">
+        <div class="four wide field">
+            <button class="ui green button" (click)="searchAction()">
+                <i class="icon search"></i>
+                ค้นหา
+            </button>
+            <button class="ui button" (click)="clear()">เคลียร์</button>
+        </div>
+    </div>
+</div>
+<table class="ui blue compact striped celled table">
+    <thead>
+    <tr>
+        <th><input class="center aligned" type="checkbox" (change)="checkAll($event)" [checked]="isCheckboxAll()"></th>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">คำขอเลขที่</th>
+        <th class="center aligned">เลข พณ.</th>
+        <th class="center aligned">ลงวันที่(วันที่ออกเลข พณ)</th>
+        <th class="center aligned">ชื่อผู้รับ</th>
+        <th class="center aligned">ที่อยู่ผู้รับ</th>
+        <th class="center aligned">ยกเลิกหนังสือ</th>
+        <th class="center aligned">สาเหตุที่ยกเลิก</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let itm of pageData.content; let rownum = index;">
+        <td class="center aligned"><input type="checkbox" [(ngModel)]="itm.chk"></td>
+        <td class="center aligned">{{(currentPage * pageSize) +(rownum + 1)}}</td>
+        <td class="center aligned">{{itm.trNo}}</td>
+        <td class="center aligned">{{itm.bookAdmin}}</td>
+        <td class="center aligned">{{itm.bookDate | datethai}}</td>
+        <td>{{itm?.agreementContract?.contractName}}</td>
+        <td>{{itm?.agreementContract?.fullAddr}}</td>
+        <td class="center aligned"><input type="checkbox" [(ngModel)]="itm.canceledFlag" [disabled]="!itm.bookAdmin || search.bookStatus==2"></td>
+        <td>
+            <div class="ui input">
+                <input type="text" [(ngModel)]="itm.canceledReason" [disabled]="search.bookStatus==2">
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th *ngIf="pageData.content.length > 0 && search.bookStatus != 2" colspan="9">
+            <div class="fields">
+                <div class="four wide field">
+                    <label>วันที่ออกหนังสือ</label>
+                    <p-calendar-gt name="date-to" [(ngModel)]="bookDate"></p-calendar-gt>
+                </div>
+                <div class="twelve wide field center aligned">
+                    <button class="ui button icon blue" (click)="printAndReleaseBookM()" [disabled]="book_admin_status_selection.value != 1">
+                        <i class="spinner icon"></i>
+                        ออกเลขและพิมพ์หนังสือ
+                    </button>
+                    <button class="ui button icon blue" (click)="printAgain()">
+                        <i class="print icon"></i>
+                        พิมพ์ซ้ำ
+                    </button>
+                    <button class="ui button icon red" (click)="showConfirmModal()" [disabled]="book_admin_status_selection.value != 2">
+                        <i class="icon save"></i>
+                        บันทึกยกเลิก
+                    </button>
+                </div>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <th colspan="9">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+<div #confirm_modal class="ui small modal confirm-modal" style="text-align: center;">
+    <i class="close icon"></i>
+    <div class="content" style="overflow: auto;">
+        <div class="description">
+            <p><i class="icon info circle blue"></i>ยืนยันการยกเลิกหนังสือคืนคำขอ ใช่หรือไม่?</p>
+        </div>
+    </div>
+    <div class="actions" style="text-align: center;">
+        <div class="ui green icon button" (click)="saveCancel()">
+            <i class="icon checkmark"></i>
+            ใช่
+        </div>
+        <div class="ui basic button" (click)="closeConfirmModal()">
+            <i class="icon remove"></i>
+            ยกเลิก
+        </div>
+    </div>
+</div>

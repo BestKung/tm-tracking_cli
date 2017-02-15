@@ -1,0 +1,85 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าวันครบกำหนดยื่นเอกสารประกอบคำขอ</div>
+    </div>
+</h2>
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>พรบ<label style="color: red;">*</label></label>
+            <select
+                    class="fluid search" placeholder="พรบ" [(ngModel)]="deadLineDoc.act.actId" name="act">
+                <option value="">เลือก พรบ</option>
+                <option *ngFor="let actYear of acts.content" value="{{actYear.actId}}">{{actYear.actDetail}}</option>
+            </select>
+            <gt-errors [violation]="'act.actId'"></gt-errors>
+        </div>
+    </div>
+    <div class="fields four">
+        <div class="field">
+            <label>จำนวนวันครบกำหนด<label style="color: red;">*</label></label>
+            <input type="text" [(ngModel)]="deadLineDoc.totalDuration" placeholder="จำนวนวันครบกำหนด"
+                   name="totalDuration" (change)="test($event)" id="totalDuration">
+            <gt-errors [violation]="'totalDuration'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>ระยะเวลาสูงสุด(เเถบสีเขียว)<label style="color: red;">*</label>
+                <div class="ui label green"></div>
+            </label>
+            <input type="text" [(ngModel)]="deadLineDoc.durationGreen" placeholder="ระยะเวลาสูงสุด(เเถบสีเขียว)"
+                   name="DurationGreen">
+            <gt-errors [violation]="'durationGreen'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>ระยะเวลาสูงสุด(เเถบสีเหลือง)<label style="color: red;">*</label>
+                <div class="ui label yellow"></div>
+            </label>
+            <input type="text" [(ngModel)]="deadLineDoc.durationYellow"
+                   placeholder="ระยะเวลาสูงสุด(เเถบสีเหลือง)"
+                   name="DurationYellow">
+            <gt-errors [violation]="'durationYellow'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>ระยะเวลาสูงสุด(เเถบสีส้ม)<label style="color: red;">*</label>
+                <div class="ui label orange"></div>
+            </label>
+            <input type="text" [(ngModel)]="deadLineDoc.durationOrange" placeholder="ระยะเวลาสูงสุด(เเถบสีส้ม)"
+                   name="durationOrange">
+            <gt-errors [violation]="'durationOrange'"></gt-errors>
+        </div>
+    </div>
+    <div class="field"></div>
+    <div class="field">
+        <button class="ui button blue" (click)="save()">บันทึก</button>
+        <button class="ui button" (click)="clearData()">ยกเลิก</button>
+    </div>
+</form>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th>ลำดับ</th>
+        <th>พรบ</th>
+        <th>จำนวนวันครบกำหนด</th>
+        <th>ระยะเวลาสูงลุด(เเถบสีเขียว)</th>
+        <th>ระยะเวลาสูงสุด(เเถบสีเหลือง)</th>
+        <th>ระยะเวลาสูงสุด(เเถบสีส้ม)</th>
+        <th>เเก้ไข</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let set of deadlinesSendDocuments.content;let index = index">
+        <td>{{index+1}}</td>
+        <td>{{set.actDetail}}</td>
+        <td>{{set.totalDuration}}</td>
+        <td>{{set.durationGreen}}</td>
+        <td>{{set.durationYellow}}</td>
+        <td>{{set.durationOrange}}</td>
+        <td>
+            <a class="ui button teal" (click)="clickUpdate(set)">เเก้ไข</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+

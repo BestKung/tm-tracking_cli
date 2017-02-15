@@ -1,0 +1,12 @@
+<h4 class="ui horizontal divider header">
+    <i class="checkmark Box icon"></i>
+    ตรวจสอบเอกสาร {{evidence?.formType?.formDesc}}
+</h4>
+<checklist-tree [evidences]="evidence?.child"></checklist-tree>
+<div class="actions">
+    <button class="ui basic button small" (click)="addChecklistToRest()">กลับ</button>
+    <button class="ui basic deny button small" (click)="clearChecklist()">
+        เคลียร์
+    </button>
+</div>
+

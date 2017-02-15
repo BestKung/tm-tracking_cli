@@ -1,0 +1,107 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="trademark-no" placeholder="คำขอเลขที่" [(ngModel)]="followCancelRestService.searchRequest.trNo"/>
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" name="step-working" [(ngModel)]="followCancelRestService.searchRequest.stepCode">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">บริการและตรวจรับคำขอ</option>
+                <option value="202">นายทะเบียนพิจารณา</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="followCancelRestService.searchRequest.startDateStr"
+                           name="searchRequest.startDateStr"
+            ></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="followCancelRestService.searchRequest.endDateStr"
+                           name="searchRequest.endDateStr"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+    </form>
+<div class="field">
+    <label>รวมระยะเวลาทั้งหมดของคำขอให้เพิกถอนการจดทะเบียน : 31 วัน</label>
+</div>
+
+<div class="one fields">
+    <table class="ui celled table blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width:10%">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of pageData.content; let index = index">
+            <td class="center aligned">
+                <div class="fw-progress">
+                    <span>{{data.totalDuration +' '+data.stepDurationType}}</span>
+                </div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="data.restDurationForStep"
+                                             [restPercenDuration]="data.restDorationPercenForStep"
+                                             [percenGreen]="data.stepPercenDurationGreen"
+                                             [percenYellow]="data.stepPercenDurationYellow"
+                                             [percentOrange]="data.stepPercenDurationOrange"
+                                             [durationGreen]="data.stepDurationGreen"
+                                             [durationYellow]="data.stepDurationYellow"
+                                             [durationOrange]="data.stepDurationOrange"
+                                             [durationType]="data.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{data.trNo}}</td>
+            <td class="center aligned">{{followCancelRestService.stepDesc[data.stepCode]}}</td>
+            <td class="center aligned">{{data.requestDate | datethai}}</td>
+            <td class="center aligned">{{data.personName}}</td>
+            <td class="center aligned">{{data.receiptDate | datethai}}</td>
+            <td class="center aligned">{{data.processStatus}}</td>
+            <td>
+                <detail-calcel-registeration-button [trNo]="data.trNo"></detail-calcel-registeration-button>
+            <td>
+                <tag-color-follow-trademanrk [label]="data.restDurationForAct"
+                                             [restPercenDuration]="data.restDorationPercenForAct"
+                                             [percenGreen]="data.catPercenDurationGreen"
+                                             [percenYellow]="data.catPercenDurationYellow"
+                                             [percentOrange]="data.catPercenDurationOrange"
+                                             [durationGreen]="data.catDurationGreen"
+                                             [durationYellow]="data.catDurationYellow"
+                                             [durationOrange]="data.catDurationOrange"
+                                             [durationType]="data.catDurationType"
+                                             [position]="'left'"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{data.overDuration}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

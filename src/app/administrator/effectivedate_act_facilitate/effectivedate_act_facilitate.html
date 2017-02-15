@@ -1,0 +1,123 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าระบุวันที่มีผลตาม พรบ อำนวยความสะดวก</div>
+    </div>
+</h2>
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>พรบ</label>
+            <select
+                    class="fluid search"
+                    placeholder="พรบ"
+                    (change)="getCategoryByAct($event.target.value)">
+                <option value="กรุณาเลือกพรบ">กรุณาเลือกพรบ</option>
+                <option *ngFor="let a of acts.content" value="{{a.actId}}">{{a.actDetail}}</option>
+            </select>
+            <gt-errors [violation]="'categoryDto.act.actDate'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>คู่มือ</label>
+            <select class="fluid search"
+                    placeholder="คู่มือ" (change)="getStepByCategory($event.target.value)">
+                <option value="กรุณาเลือกคู่มือ">กรุณาเลือกคู่มือ</option>
+                <option value="{{category.id}}" *ngFor="let category of categorys.content">{{category.description}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>ระยะเวลารวมทั้งหมดตาม พรบ</label>
+            <input type="text" [(ngModel)]="category.totalDuration" [ngModelOptions]="{standalone: true}">
+            <gt-errors [violation]="'categoryDto.totalDuration'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>หน่วยระยะเวลาทั้งหมดตาม พรบ</label>
+            <select [(ngModel)]="category.durationType" [ngModelOptions]="{standalone: true}">
+                <option value="วัน">วัน</option>
+                <option value="เดือน">เดือน</option>
+            </select>
+            <gt-errors [violation]="'categoryDto.durationType'"></gt-errors>
+        </div>
+    </div>
+    <div class="three fields">
+        <div class="field">
+            <label>ระยะเวลาเเถบเขียว
+                <div class="ui label green"></div>
+            </label>
+            <input type="text" [(ngModel)]="category.durationGreen" [ngModelOptions]="{standalone: true}">
+            <gt-errors [violation]="'categoryDto.durationGreen'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>ระยะเวลาเเถบเหลือง
+                <div class="ui label yellow"></div>
+            </label>
+            <input type="text" [(ngModel)]="category.durationYellow" [ngModelOptions]="{standalone: true}">
+            <gt-errors [violation]="'categoryDto.durationYellow'"></gt-errors>
+        </div>
+        <div class="field">
+            <label>ระยะเวลาเเถบส้ม
+                <div class="ui label orange"></div>
+            </label>
+            <input type="text" [(ngModel)]="category.durationOrange" [ngModelOptions]="{standalone: true}">
+            <gt-errors [violation]="'categoryDto.durationOrange'"></gt-errors>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <div class="ui label blue">ขั้นตอนการดำเนินงานของ {{category.description}} ({{act.actDetail}})</div>
+        </div>
+    </div>
+    <table class="ui table celled blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ลำดับขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาทั้งหมด</th>
+            <th class="center aligned">หน่วยของระยะเวลา</th>
+            <th class="center aligned">ระยะเวลาเเถบสีเขียว</th>
+            <th class="center aligned">ระยะเวลาเเถบสีเหลือง</th>
+            <th class="center aligned">ระยะเวลาเเถบสีส้ม</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let step of stepss.content;let index = index">
+            <td class="center aligned">{{index+1}}</td>
+            <td>{{step.name}}</td>
+            <td>
+                <div class="field">
+                    <input type="text" [(ngModel)]="step.totalDuration" [ngModelOptions]="{standalone: true}">
+                </div>
+            </td>
+            <td class="center aligned">
+                <select class="fluid" [(ngModel)]="step.durationType" [ngModelOptions]="{standalone: true}">
+                    <option value="วัน">วัน</option>
+                    <option value="เดือน">เดือน</option>
+                </select>
+            </td>
+            <td>
+                <div class="field">
+                    <input type="text" [(ngModel)]="step.durationGreen" [ngModelOptions]="{standalone: true}">
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <input type="text" [(ngModel)]="step.durationYellow" [ngModelOptions]="{standalone: true}">
+                </div>
+            </td>
+            <td>
+                <div class="field">
+                    <input type="text" [(ngModel)]="step.durationOrange" [ngModelOptions]="{standalone: true}">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<div class="field">
+    <button class="ui button right floated" (click)="clear()">เคลียร์</button>
+    <button class="ui button blue right floated" (click)="save()">บันทึก</button>
+</div>

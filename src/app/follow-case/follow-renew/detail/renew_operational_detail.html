@@ -1,0 +1,50 @@
+<h4 class="ui header dividing">
+    <!--<i class="info icon"></i>-->
+    <div class="content">รายละเอียดการดำเนินการ</div>
+</h4>
+<div class="ui grid">
+    <div class="two wide column">
+        <label> คำขอเลขที่ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{trNo}}
+    </div>
+    <div class="two wide column">
+        <label> ชื่อ - สกุลผู้ขอ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{conName}}
+    </div>
+    <div class="two wide column">
+        <label> วันที่ยื่นคำขอ :</label>
+    </div>
+    <div class="thirteen wide column">
+        {{requestDate | datethai}}
+    </div>
+</div>
+<table class="ui celled table">
+    <thead>
+    <tr>
+        <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+        <th class="center aligned">ระยะเวลา</th>
+        <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+        <th class="center aligned">วันที่รับงาน</th>
+        <th class="center aligned">วันที่ดำเนินการเสร็จสิ้น</th>
+        <th class="center aligned">สถานะ</th>
+        <th class="center aligned">ระยะเวลาที่ใช้</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let step of steps">
+        <td>{{findStepDescByStepCode(step.stepProcess)}}</td>
+        <td class="center aligned">{{step.duration+" "+step.durationType}}</td>
+        <td class="center aligned">{{step.personName}}</td>
+        <td class="center aligned">{{step.receiptDate | datethai}}</td>
+        <td class="center aligned">{{step.successDate | datethai}}</td>
+        <td class="center aligned">{{step.status}}</td>
+        <td class="center aligned">{{step.useDuration}}</td>
+    </tr>
+    </tbody>
+   </table>
+
+<a class="ui right floated button" (click)="black()">กลับ</a>

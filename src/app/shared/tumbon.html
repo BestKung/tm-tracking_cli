@@ -1,0 +1,13 @@
+<div class="ui search" #tumbon_search [class.visible]="tombonResult">
+    <div class="ui icon input">
+        <input #tumbon_text class="prompt" type="text" [value]="dataInputTumbon">
+        <i class="search icon"></i>
+    </div>
+    <div class="results transition" [class.visible]="tombonResult"  style="popupStyle">
+        <a class="result" *ngFor="let tumbon of tombonResult">
+            <div class="content" (click)="select(tumbon)">
+                <div class="title">{{tumbon.locRepName}}</div>
+            </div>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>ระบุช่วงวันที่บันทึกข้อตกลง</label>
+            <p-calendar-gt name="date-from" placeholder="ระบุช่วงวันที่บันทึกข้อตกลง"
+                           [(ngModel)]="search.createDateFrom"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt name="date-to" placeholder="ถึง" [(ngModel)]="search.createDateTo"></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+
+<sm-tabs *ngIf="textLabel.length > 0">
+    <sm-tab title="Bar Chart" class="active">
+        <a onclick="this.href=document.getElementById('bar-chart').getElementsByTagName('canvas')[0].toDataURL('image/png')"
+           download="bar-chart.png" style="cursor: pointer">Download</a>
+        <report-statistics-verify-request [labels]="textLabel" [statisticValue]="valueMapper"
+                                          id="bar-chart"></report-statistics-verify-request>
+    </sm-tab>
+    <sm-tab title="Line Chart">
+        <a onclick="this.href=document.getElementById('line-chart').getElementsByTagName('canvas')[0].toDataURL('image/png')"
+           download="line-chart.png" style="cursor: pointer">Download</a>
+        <report-statistics-verify-request-inechart [labels]="textLabel" [statisticValue]="valueMapper"
+                                                   id="line-chart"></report-statistics-verify-request-inechart>
+    </sm-tab>
+</sm-tabs>

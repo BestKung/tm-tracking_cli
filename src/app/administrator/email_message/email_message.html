@@ -1,0 +1,114 @@
+<h2 class="ui header">
+    <i class="circular blue settings icon"></i>
+    <div class="content">
+        ผู้ดูแลระบบ
+        <div class="sub header">ตั้งค่าข้อความเเจ้งเตือน(อีเมล์)</div>
+    </div>
+</h2>
+<div class="ui form">
+    <div class="ui grid">
+        <div class="five wide column">
+            <label>ชนิดการเเจ้งเตือน<label style="color: red;">*</label></label>
+            <select [(ngModel)]="emailMessage.type">
+                <option value="">ชนิดการเเจ้งเตือน</option>
+                <option value="เเจ้งให้ต่ออายุ">เเจ้งให้ต่ออายุ</option>
+                <option value="เเจ้งให้ชำระค่าธรรมเนียมการจดทะเบียน">เเจ้งให้ชำระค่าธรรมเนียมการจดทะเบียน</option>
+                <option value="เเจ้งให้ชำระค่าธรรมเนียมสัญญาอนุญาตให้ใช้">เเจ้งให้ชำระค่าธรรมเนียมสัญญาอนุญาตให้ใช้
+                </option>
+            </select>
+            <gt-errors [violation]="'type'"></gt-errors>
+        </div>
+        <div class="five wide column">
+            <label>ตั้งค่าเมลล์ผู้ส่ง</label>
+            <input type="text" [(ngModel)]="emailMessage.mailFrom">
+        </div>
+        <div class="ten wide column">
+            <label>ข้อความ<label style="color: red;">*</label></label>
+            <textarea [(ngModel)]="emailMessage.text"></textarea>
+            <gt-errors [violation]="'text'"></gt-errors>
+        </div>
+
+        <div class="six wide column">
+            <label>เเมปข้อความ</label>
+            <div class="field">
+                <map-message-button [label]="'เลขที่คำขอ'" [message]="'$tr_no'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"></map-message-button>
+                <map-message-button [label]="'เลขทะเบียน'" [message]="'$reg_no'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"></map-message-button>
+            </div>
+            <div class="field">
+                <map-message-button [label]="'ขื่อเจ้าของ'" [message]="'$con_name'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"></map-message-button>
+                <map-message-button [label]="'จำนวนเงิน'" [message]="'$fee_amount'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"
+                                    *ngIf="emailMessage.type != 'เเจ้งให้ต่ออายุ' && emailMessage.type != ''"
+                ></map-message-button>
+                <map-message-button [label]="'วันสิ้นอายุ'" [message]="'$expire_date'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"
+                                    *ngIf="emailMessage.type == 'เเจ้งให้ต่ออายุ' && emailMessage.type != ''"
+                ></map-message-button>
+            </div>
+            <div class="field">
+                <map-message-button [label]="'วันหมดเขตชำระค่าต่ออายุ '" [message]="'$due_date_renew'"
+                                    [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"
+                                    smDirTooltip="ภายในหกเดือนนับแต่วันสิ้นอายุ" smDirPosition="right center"
+                                    *ngIf="emailMessage.type == 'เเจ้งให้ต่ออายุ' && emailMessage.type != ''"
+                ></map-message-button>
+                <map-message-button [label]="'วันที่ประกาศโฆษณา'" [message]="'$pub_date'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"
+                                    *ngIf="emailMessage.type != 'เเจ้งให้ต่ออายุ' && emailMessage.type != '' && emailMessage.type != 'เเจ้งให้ชำระค่าธรรมเนียมสัญญาอนุญาตให้ใช้'"
+                ></map-message-button>
+                <map-message-button [label]="'เล่มที่ประกาศโฆษณา'" [message]="'$book_date'" [text]="emailMessage.text"
+                                    (clickEvent)="clickMapText($event)"
+                                    *ngIf="emailMessage.type != 'เเจ้งให้ต่ออายุ' && emailMessage.type != '' && emailMessage.type != 'เเจ้งให้ชำระค่าธรรมเนียมสัญญาอนุญาตให้ใช้'"
+                ></map-message-button>
+            </div>
+        </div>
+    </div>
+    <div class="field"></div>
+    <button class="ui button blue" (click)="save()">บันทึก</button>
+    <button class="ui button" (click)="clear()">เคลียร์</button>
+</div>
+
+<table class="ui table celled" style="table-layout: fixed;">
+    <thead>
+    <tr>
+        <th style="width: 5%;">ลำดับ</th>
+        <th style="width: 25%;">ชนิดการเเจ้งเตือน</th>
+        <th style="width: 50%;">ข้อความ</th>
+        <th style="width: 20%;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let message of emailMessages.content ; let index = index">
+        <td>{{currentPage*pageSize+index+1}}</td>
+        <td>{{message.type}}</td>
+        <td style="overflow:hidden;white-space:pre-line;">{{message.text}}</td>
+        <td>
+            <update-button [label]="'เเก้ไข'" [key]="message" (updateEvent)="edit($event)"></update-button>
+            <delete-button [label]="'ลบ'" [key]="message" (deleteEvent)="clickDelete($event)"></delete-button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="ui modal small" #confirm_delete>
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="Trash Outline icon"></i>
+        </h4>
+    </div>
+    <div class="content">
+        ยืนยันการลบ
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            ยกเลิก
+        </div>
+        <div class="ui green button deny" (click)="delete()">
+            ตกลง
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" placeholder="คำขอเลขที่" [(ngModel)]="_followRestObj.searchRequest.trNo"
+                   [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" [(ngModel)]="_followRestObj.searchRequest.stepCode" [ngModelOptions]="{standalone: true}">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">ตรวจสอบเอกสารรับคำขอ</option>
+                <option value="201">ตรวจสอบเครื่องหมาย</option>
+                <option value="202">นายทะเบียนพิจารณา</option>
+                <option value="301">จัดทำหนังสือประกาศโฆษณา</option>
+                <option value="304">ประกาศโฆษณา</option>
+                <option value="307">ออกหนังสือแจ้งให้ผู้ขอ ชำระค่าธรรมเนียมการจดทะเบียน</option>
+                <option value="308">ออกหนังสือสำคัญแสดงการจดทะเบียน</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="_followRestObj.searchRequest.startDateStr"
+                           [ngModelOptions]="{standalone: true}"
+            ></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="_followRestObj.searchRequest.endDateStr"
+                           [ngModelOptions]="{standalone: true}"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()"> เคลียร์</a>
+    <pre>รวมระยะเวลาทั้งหมดของคำขอจดทะเบียนเครื่องหมายการค้า : 16 เดือน</pre>
+    <table class="ui celled teal striped table">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <!--<th class="center aligned">วันที่ดำเนินการเสร็จสิ้น</th>-->
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width: 10%">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let trademark of pageData.content;let index = index">
+            <td class="center aligned">
+                <div>{{trademark.totalDuration +' '+trademark.stepDurationType}}</div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="trademark.restDurationForStep"
+                                             [restPercenDuration]="trademark.restDorationPercenForStep"
+                                             [percenGreen]="trademark.stepPercenDurationGreen"
+                                             [percenYellow]="trademark.stepPercenDurationYellow"
+                                             [percentOrange]="trademark.stepPercenDurationOrange"
+                                             [durationGreen]="trademark.stepDurationGreen"
+                                             [durationYellow]="trademark.stepDurationYellow"
+                                             [durationOrange]="trademark.stepDurationOrange"
+                                             [durationType]="trademark.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{trademark.trNo}}</td>
+            <td class="center aligned">{{_followRestObj.stepDesc[trademark.stepCode]}}</td>
+            <td class="center aligned">{{trademark.requestDate | datethai}}</td>
+            <td class="center aligned">{{trademark.personName}}</td>
+            <td class="center aligned">{{trademark.receiptDate | datethai}}</td>
+            <td class="center aligned">{{trademark.processStatus}}
+                <div style="color: darkblue;">{{(trademark.stopDuration)?'('+trademark.stopDuration+')' : ''}}</div></td>
+            <td class="center aligned">
+                <detail-trademark-button [trNo]="trademark.trNo"></detail-trademark-button>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="trademark.restDurationForAct"
+                                             [restPercenDuration]="trademark.restDorationPercenForAct"
+                                             [percenGreen]="trademark.catPercenDurationGreen"
+                                             [percenYellow]="trademark.catPercenDurationYellow"
+                                             [percentOrange]="trademark.catPercenDurationOrange"
+                                             [position]="'left'"
+                                             [durationGreen]="trademark.catDurationGreen"
+                                             [durationYellow]="trademark.catDurationYellow"
+                                             [durationOrange]="trademark.catDurationOrange"
+                                             [durationType]="trademark.catDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{trademark.overDuration}}</td>
+
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</form>

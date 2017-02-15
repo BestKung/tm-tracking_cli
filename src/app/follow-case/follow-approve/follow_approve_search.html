@@ -1,0 +1,109 @@
+<form class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>คำขอเลขที่</label>
+            <input type="text" name="trademark-no" placeholder="คำขอเลขที่" [(ngModel)]="followApprvRestObj.searchRequest.trNo"/>
+        </div>
+        <div class="field">
+            <label>ขั้นตอนการดำเนินงาน</label>
+            <select class="ui dropdown" name="step-working" [(ngModel)]="followApprvRestObj.searchRequest.stepCode">
+                <option value="">เลือกขั้นตอนการดำเนินงาน</option>
+                <option value="101">บริการและตรวจรับคำขอ</option>
+                <option value="201">นายทะเบียนพิจารณา</option>
+                <option value="307">ออกหนังสือแจ้งให้ผู้ขอชำระค่าธรรมเนียมสัญญาอนุญาตให้ใช้เครื่องหมายการค้า</option>
+                <option value="308">รับจดทะเบียนและออกหนังสือแจ้งการรับจดทะเบียนสัญญาอนุญาตให้ใช้เครื่องหมายการค้า
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ยื่นคำขอ</label>
+            <p-calendar-gt placeholder="วันที่ยื่นคำขอ" [(ngModel)]="followApprvRestObj.searchRequest.startDateStr"
+                           name="searchRequest.startDateStr"
+            ></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt placeholder="ถึง" [(ngModel)]="followApprvRestObj.searchRequest.endDateStr"
+                           name="searchRequest.endDateStr"
+            ></p-calendar-gt>
+        </div>
+    </div>
+    <a class="ui button green" (click)="searchAction()">ค้นหา</a>
+    <a class="ui button" (click)="clear()">เคลียร์</a>
+</form>
+<div class="field">
+    <label>รวมระยะเวลาทั้งหมดของคำขอจดทะเบียนสัญญาอนุญาตให้ใช้เครื่องหมายการค้า : 105 วัน</label>
+</div>
+<div class="one fields">
+    <table class="ui celled table blue">
+        <thead>
+        <tr>
+            <th class="center aligned">ระยะเวลาของขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">ระยะเวลาที่เหลือของขั้นตอน</th>
+            <th class="center aligned">ลำดับ</th>
+            <th class="center aligned">คำขอเลขที่</th>
+            <th class="center aligned">ขั้นตอนการดำเนินงาน</th>
+            <th class="center aligned">วันที่ยื่นคำขอ</th>
+            <th class="center aligned">เจ้าหน้าที่รับผิดชอบ</th>
+            <th class="center aligned">วันที่รับงาน</th>
+            <th class="center aligned">สถานะ</th>
+            <th class="center aligned" style="width:10%">รายละเอียด</th>
+            <th class="center aligned">ระยะเวลาดำเนินการที่เหลือตาม พรบ</th>
+            <th class="center aligned">ระยะเวลาที่เกินตาม พรบ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let approve of pageData.content; let index = index">
+            <td class="center aligned">
+                <div class="fw-progress">
+                    <span>{{approve.totalDuration +' '+approve.stepDurationType}}</span>
+                </div>
+            </td>
+            <td>
+                <tag-color-follow-trademanrk [label]="approve.restDurationForStep"
+                                             [restPercenDuration]="approve.restDorationPercenForStep"
+                                             [percenGreen]="approve.stepPercenDurationGreen"
+                                             [percenYellow]="approve.stepPercenDurationYellow"
+                                             [percentOrange]="approve.stepPercenDurationOrange"
+                                             [durationGreen]="approve.stepDurationGreen"
+                                             [durationYellow]="approve.stepDurationYellow"
+                                             [durationOrange]="approve.stepDurationOrange"
+                                             [durationType]="approve.stepDurationType"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+            <td class="center aligned">{{approve.trNo}}</td>
+            <td class="center aligned">{{followApprvRestObj.stepDesc[approve.stepCode]}}</td>
+            <td class="center aligned">{{approve.requestDate | datethai}}</td>
+            <td class="center aligned">{{approve.personName}}</td>
+            <td class="center aligned">{{approve.receiptDate | datethai}}</td>
+            <td class="center aligned">{{approve.processStatus}}</td>
+            <td class="center aligned">
+                <detail-approve-button [trNo]="approve.trNo"></detail-approve-button>
+            <td>
+                <tag-color-follow-trademanrk [label]="approve.restDurationForAct"
+                                             [restPercenDuration]="approve.restDorationPercenForAct"
+                                             [percenGreen]="approve.catPercenDurationGreen"
+                                             [percenYellow]="approve.catPercenDurationYellow"
+                                             [percentOrange]="approve.catPercenDurationOrange"
+                                             [durationGreen]="approve.catDurationGreen"
+                                             [durationYellow]="approve.catDurationYellow"
+                                             [durationOrange]="approve.catDurationOrange"
+                                             [durationType]="approve.catDurationType"
+                                             [position]="'left'"
+                ></tag-color-follow-trademanrk>
+            </td>
+            <td class="center aligned">{{approve.overDuration}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="13">
+                <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,40 @@
+<div class="ui header dividing">
+    <h2>ทดสอบส่งเมลล์</h2>
+</div>
+<div class="ui form">
+    <a class="ui button" (click)="setMail()">set Email</a>
+    <a class="ui button" (click)="sendMail()">send Email</a>
+</div>
+<table class="ui table celled">
+    <thead>
+    <tr>
+        <th>ถึง</th>
+        <th>เบอร์โทร</th>
+        <th>เลขประชาชน</th>
+        <th>หัวข้อ</th>
+        <th>ข้อความ</th>
+        <th>โทเคน</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of pageData.content">
+        <td><input type="text" [(ngModel)]="data.to"></td>
+        <td><input type="text" [(ngModel)]="data.phone"></td>
+        <td><input type="text" [(ngModel)]="data.pid"></td>
+        <td>{{data.subject}}</td>
+        <td>{{data.text}}</td>
+        <td><input type="text" [(ngModel)]="data.token"></td>
+        <td><a class="ui button" (click)="save(data)">บันทึก</a></td>
+        <td><a class="ui button" (click)="message(data)">ส่ง message</a></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="8">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>

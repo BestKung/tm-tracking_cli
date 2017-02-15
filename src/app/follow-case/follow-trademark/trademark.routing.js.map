@@ -1,0 +1,1 @@
+{"version":3,"file":"trademark.routing.js","sourceRoot":"","sources":["trademark.routing.ts"],"names":[],"mappings":";AACA,uBAA2B,iBAAiB,CAAC,CAAA;AAC7C,gDAA2C,mCAAmC,CAAC,CAAA;AAC/E,8CAAgC,wCAAwC,CAAC,CAAA;AACzE;;GAEG;AACU,eAAO,GAAuB,qBAAY,CAAC,QAAQ,CAAC;IAE7D,EAAC,IAAI,EAAE,EAAE,EAAE,SAAS,EAAE,8DAA4B,EAAC;IACnD,EAAC,IAAI,EAAE,cAAc,EAAE,SAAS,EAAE,iDAAiB,EAAC;CACvD,CAAC,CAAC"}

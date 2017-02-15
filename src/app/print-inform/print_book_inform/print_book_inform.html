@@ -1,0 +1,131 @@
+<h2 class="ui header">
+    <i class="circular red wait icon"></i>
+    <div class="content">
+        แจ้งเหตุล่าช้า
+        <div class="ui sub header "><h4>พิมพ์หนังสือเเจ้งเหตุล่าช้า</h4></div>
+    </div>
+</h2>
+<div class="ui form">
+    <div class="two fields">
+        <div class="field">
+            <label>เลขที่คำขอ</label>
+            <input type="text" [(ngModel)]="searchPrintBookInform.trNo">
+        </div>
+        <div class="field">
+            <label>คู่มือ</label>
+            <select [(ngModel)]="searchPrintBookInform.formType">
+                <option value="">เลือกคู่มือ</option>
+                <option value="01">ก.01</option>
+                <option value="04">ก.04</option>
+                <option value="05">ก.05</option>
+                <option value="06">ก.06</option>
+                <option value="07">ก.07</option>
+                <option value="08">ก.08</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>วันที่ออกหนังสือ</label>
+            <p-calendar-gt [(ngModel)]="searchPrintBookInform.satrDateStr"
+                           name="searchPrintBookInform.satrDate"></p-calendar-gt>
+        </div>
+        <div class="field">
+            <label>ถึง</label>
+            <p-calendar-gt [(ngModel)]="searchPrintBookInform.endDateStr"
+                           name="searchPrintBookInform.endDate"></p-calendar-gt>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label>คู่มือ</label>
+            <select [(ngModel)]="searchPrintBookInform.whereBookAdmin">
+                <option value="">ทั้งหมด</option>
+                <option value="1">ออกเลข พณ เเล้ว</option>
+                <option value="0">ยังไม่ออกเลข พณ</option>
+            </select>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <button class="ui button green" (click)="searchAction()">ค้นหา</button>
+            <button class="ui button" (click)="clear()">เคลียร์</button>
+        </div>
+    </div>
+</div>
+
+<table class="ui table celled">
+    <thead>
+    <tr>
+        <th class="center aligned"><input type="checkbox" (change)="checkAll($event)" [(ngModel)]="chkAll"></th>
+        <th class="center aligned">ลำดับ</th>
+        <th class="center aligned">เลขที่คำขอ</th>
+        <th class="center aligned">คู่มือ</th>
+        <th class="center aligned">วันที่</th>
+        <th class="center aligned">เลขที่ พณ</th>
+        <th class="center aligned">พิมพ์หนังสือเเจ้ง</th>
+        <th class="center aligned">ยกเลิก</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let informTemplate of pageData.content;let index = index">
+        <td class="center aligned"><input type="checkbox" [(ngModel)]="informTemplate.chk"
+                                          (change)="cancelCheckAll($event)"></td>
+        <td class="center aligned">{{((currentPage < 0? 0: currentPage)*pageSize)+(index+1)}}</td>
+        <td class="center aligned">{{informTemplate.trNo}}</td>
+        <td class="center aligned">{{informTemplate.formType}}</td>
+        <td class="center aligned">{{informTemplate.bookDate | datethai}}</td>
+        <td class="center aligned">{{informTemplate.bookAdmin}}</td>
+        <td class="center aligned">
+            <a class="ui button blue mini" (click)="clickPrintBook(informTemplate)"
+               *ngIf="informTemplate.bookAdmin == null">ออกเลขเเละพิมพ์หนังสือ</a>
+            <a class="ui button mini" (click)="draftBook(informTemplate)" *ngIf="informTemplate.bookAdmin == null">ตัวอย่าง</a>
+            <a class="ui button mini grey" (click)="draftBook(informTemplate)" *ngIf="informTemplate.bookAdmin != null">พิมพ์ซ้ำ</a>
+        </td>
+        <td class="center aligned"><a class="ui button red mini"
+                                      (click)="clickCancelBook(informTemplate)">ยกเลิกหนังสือ</a></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <th colspan="8">
+            <label>วันที่ออกเลข พณ<label style="color: red;">*</label></label>
+            <p-calendar-gt [(ngModel)]="bookDate" name="bookDate"></p-calendar-gt>
+            <label style="color: red;" *ngIf="isNotSpecBookDate">กรุณาระบุวันที่ออกเลข พณ</label>
+            <div>
+                <a class="ui button blue mini" (click)="clickPrintBookAll()">ออกเลขเเละพิมพ์หนังสือตามที่เลือก</a>
+                <a *ngIf="searchPrintBookInform.whereBookAdmin == '1'" class="ui button grey mini" (click)="draftBookAll()">พิมพ์ซ้ำตามที่เลือก</a>
+                <a *ngIf="searchPrintBookInform.whereBookAdmin == '0'" class="ui button mini" (click)="draftBookAll()">ตัวอย่างตามที่เลือก</a>
+            </div>
+            <div>
+                <label style="color: red" *ngIf="isNotSelectBook">กรุณาเลือกหนังสือเเจ้งเหตุล่าช้า อย่างน้อย 1</label>
+            </div>
+        </th>
+    </tr>
+    <tr>
+        <th colspan="8">
+            <pagination [page]="pageData" (pageChange)="searchAction($event)"></pagination>
+        </th>
+    </tr>
+    </tfoot>
+</table>
+
+<div class="ui modal" #modal_confirm_cancel>
+    <div class="header">
+        <h4 class="ui center aligned icon header">
+            <i class="Trash Outline icon"></i>
+        </h4>
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+                <label>เหตุผล</label>
+                <textarea rows="5" [(ngModel)]="printBookInform.remarkForCanCelBook"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <a class="ui button black deny">ปิด</a>
+        <a class="ui button green deny" (click)="cancelBook()">ยกเลิกหนังสือ</a>
+    </div>
+</div>
